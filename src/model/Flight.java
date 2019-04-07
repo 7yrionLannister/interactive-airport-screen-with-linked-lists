@@ -1,6 +1,6 @@
 package model;
 
-public class Flight {
+public class Flight implements Comparable<Flight> {
 
 	private Date date;
 	private String airline;
@@ -17,8 +17,11 @@ public class Flight {
 	 * @param boardingGates
 	 */
 	public Flight(Date date, String airline, int flightNumber, String destinationCity, int boardingGates) {
-		// TODO - implement Flight.Flight
-		throw new UnsupportedOperationException();
+		this.date = date;
+		this.airline = airline;
+		this.flightNumber = flightNumber;
+		this.destinationCity =destinationCity;
+		this.boardingGates = boardingGates;
 	}
 
 	public Date getDate() {
@@ -86,8 +89,14 @@ public class Flight {
 	 * @param flight
 	 */
 	public int compareTo(Flight flight) {
-		// TODO - implement Flight.compareTo
-		throw new UnsupportedOperationException();
+		int comparation = 0;
+		if(date.compareTo(flight.date) > 0) {
+			comparation =1;
+		}
+		else if(date.compareTo(flight.date) < 0) {
+			comparation = -1;
+		}
+		return comparation;
 	}
 
 }

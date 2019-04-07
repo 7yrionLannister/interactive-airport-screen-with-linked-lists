@@ -1,11 +1,18 @@
 package model;
 
-public class Date {
+public class Date implements Comparable<Date> {
 
 	private int day;
 	private int month;
 	private int year;
 	private double hour;
+
+	public Date(int day, int month, int year, double hour) {
+		this.day = day;
+		this.month = month;
+		this.year = year;
+		this.hour = hour;
+	}
 
 	public int getDay() {
 		return this.day;
@@ -55,9 +62,32 @@ public class Date {
 		this.hour = hour;
 	}
 
-	public boolean equals() {
-		// TODO - implement Date.equals
-		throw new UnsupportedOperationException();
+	@Override
+	public int compareTo(Date date) {
+		int comparation = 0;
+		if(year > date.year) {
+			comparation = 1;
+		}
+		else if(year < date.year) {
+			comparation = -1;
+		}
+		else {
+			if(month > date.month) {
+				comparation = 1;
+			}
+			else if(month < date.month) {
+				comparation = -1;
+			}
+			else {
+				if(day > date.day) {
+					comparation = 1;
+				}
+				else if(day < date.day ) {
+					comparation = -1;
+				}
+			}
+		}
+		return comparation;
 	}
 
 }

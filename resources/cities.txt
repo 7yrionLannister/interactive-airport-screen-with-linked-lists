@@ -1,0 +1,98 @@
+Reikiavik
+Lisboa
+Casablanca
+Londres
+Madrid
+París
+Argel
+Bruselas
+Ámsterdam
+Zúrich
+Fráncfort
+Oslo
+Roma
+Copenhague
+Berlín
+Estocolmo
+Budapest
+Varsovia
+Ciudad del Cabo
+Sofía
+Atenas
+Helsinki
+Estambul
+Kiev
+El Cairo
+Jerusalén
+Moscú
+Adís Abeba
+Yeda
+Teherán
+Dubái
+Kabul
+Karachi
+Delhi
+Katmandú
+Novosibirsk
+Daca
+Rangún
+Bangkok
+Hanói
+Yakarta
+Kuala Lumpur
+Singapur
+Hong Kong
+Perth
+Pekín
+Manila
+Shanghái
+Taipéi
+Seúl
+Tokio
+Adelaida
+Vladivostok
+Guam
+Sídney
+Numea
+Wellington
+Suva
+Nukualofa
+Kiritimati
+Honolulu
+Anchorage
+Vancouver
+San Francisco
+Seattle
+Los Ángeles
+Tijuana
+Edmonton
+Phoenix
+Chihuahua
+Denver
+Ciudad de México
+Winnipeg
+Dallas
+Houston
+Ciudad de Guatemala
+Chicago
+Atlanta
+La Habana
+Toronto
+Lima
+Washington D.C.
+Kingston
+Filadelfia
+Bogotá
+Nueva York
+Boston
+Caracas
+Santiago
+La Paz
+San Juan
+Halifax
+Saint John
+Buenos Aires
+Montevideo
+Río de Janeiro
+Fernando de Noronha
+Praia
