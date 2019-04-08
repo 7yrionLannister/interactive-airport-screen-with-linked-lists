@@ -6,7 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+
+import javafx.collections.ObservableList;
 
 public class Airport {
 
@@ -20,18 +22,20 @@ public class Airport {
 	public final static int ORDERED_BY_TIME = 5;
 	public final static int ORDERED_BY_DESTINATION_CITY = 6;
 	public final static int ORDERED_BY_AIRLINE = 7;
+	public final static int ORDERED_BY_BOARDING_GATES = 8;
 	
 	private int orderType;
 	
-	private Flight[] flights;
+	private ObservableList<Flight> flights;
 	private SecureRandom sr;
 	
-	public Airport() {
+	public Airport(ObservableList<Flight> flights) {
 		sr = new SecureRandom();
 		orderType = DISORGANIZED;
+		this.flights = flights;
 	}
 	
-	public Flight[] getFlights() {
+	public ObservableList<Flight> getFlights() {
 		return flights;
 	}
 
@@ -39,13 +43,13 @@ public class Airport {
 	 * 
 	 * @param flights
 	 */
-	public void setFlights(Flight[] flights) {
+	public void setFlights(ObservableList<Flight> flights) {
 		this.flights = flights;
 	}
 
 	public void generateFlightList(int lenght) throws IOException {
 		orderType = DISORGANIZED;
-		flights = new Flight[lenght];
+		flights.clear();
 		ArrayList<Integer> randomNumbers = new ArrayList<>();
 		for(int i = 0; i < lenght; i++) {
 			int day = sr.nextInt(31) + 1;
@@ -54,37 +58,37 @@ public class Airport {
 			double hour = sr.nextDouble()*24.0;
 			Date date = new Date(day, month, year, hour);
 			String airline = getRandomAirline();
-			int flightNumber = sr.nextInt();
+			int flightNumber = 1 + sr.nextInt(10000000);
 			while(randomNumbers.contains(flightNumber)) {
-				flightNumber = sr.nextInt();
+				flightNumber = 1 + sr.nextInt(10000000);
 			}
 			String destinationCity = getRandomCity();
-			int boardingGates = sr.nextInt();
+			int boardingGates = 1 + sr.nextInt(10);
 			
-			flights[i] = new Flight(date, airline, flightNumber, destinationCity, boardingGates);
+			flights.add( new Flight(date, airline, flightNumber, destinationCity, boardingGates));
 		}
 	}
 
 	public void sortByDateAndTime() {
-		Arrays.sort(flights);
+		Collections.sort(flights);
 		orderType = ORDERED_BY_DATE_AND_TIME;
 	}
 
 	public void sortByDate() {
 		DateComparator dc = new DateComparator();
-		Arrays.sort(flights, dc);
+		Collections.sort(flights, dc);
 		orderType = ORDERED_BY_DATE;
 	}
 
 	//bubble
 	public void sortByTime() {
 		TimeComparator tc = new TimeComparator();
-		for(int i = 0; i < flights.length; i++) {
-			for(int j = 0; j < flights.length-1-i; j++) {
-				if(tc.compare(flights[j], flights[j+1]) > 0) {
-					Flight temp = flights[j];
-					flights[j] = flights[j+1];
-					flights[j+1] = temp;
+		for(int i = 0; i < flights.size(); i++) {
+			for(int j = 0; j < flights.size()-1-i; j++) {
+				if(tc.compare(flights.get(j), flights.get(j+1)) > 0) {
+					Flight temp = flights.get(j);
+					flights.set(j, flights.get(j+1));
+					flights.set(j+1, temp);
 				}
 			}
 		}
@@ -94,16 +98,16 @@ public class Airport {
 	//selection
 	public void sortByAirline() {
 		AirlineComparator ac = new AirlineComparator();
-		for(int i = 0; i < flights.length; i++) {
+		for(int i = 0; i < flights.size(); i++) {
 			int low = i;
-			for(int j = i+1; j < flights.length; j++) {
-				if(ac.compare(flights[low], flights[j]) > 0) {
+			for(int j = i+1; j < flights.size(); j++) {
+				if(ac.compare(flights.get(low), flights.get(j)) > 0) {
 					low = j;
 				}
 			}
-			Flight temp = flights[low];
-			flights[low] = flights[i];
-			flights[i] = temp;
+			Flight temp = flights.get(low);
+			flights.set(low, flights.get(i));
+			flights.set(i, temp);
 		}
 		orderType = ORDERED_BY_AIRLINE;
 	}
@@ -111,24 +115,30 @@ public class Airport {
 	//insertion
 	public void sortByFlightNumber() {
 		FlightNumberComparator fnc = new FlightNumberComparator();
-		for(int i = 1; i < flights.length; i++) {
-			Flight current = flights[i];
+		for(int i = 1; i < flights.size(); i++) {
+			Flight current = flights.get(i);
 			int j = i-1;
-			while(j >= 0 && fnc.compare(flights[j], current)  > 0) {
-				flights[j+1] = flights[j];
+			while(j >= 0 && fnc.compare(flights.get(j), current)  > 0) {
+				flights.set(j+1, flights.get(j));
 				j--;
 			}
-			flights[j+1] = current;
+			flights.set(j+1, current);
 		}
 		orderType = ORDERED_BY_FLIGHT_NUMBER;
 	}
 
 	public void sortByDestinationCity() {
 		DestinationCityComparator dcc = new DestinationCityComparator();
-		Arrays.sort(flights, dcc);
+		Collections.sort(flights, dcc);
 		orderType = ORDERED_BY_DESTINATION_CITY;
 	}
 
+	public void sortByBoardingGates() {
+		Collections.sort(flights, new BoardingGatesComparator());
+		orderType = ORDERED_BY_BOARDING_GATES;
+	}
+	
+	//Collections.binarySearch
 	/**
 	 * 
 	 * @param date
@@ -136,28 +146,30 @@ public class Airport {
 	public Flight searchByDate(Date date) {
 		Flight flight = null;
 		Flight key = new Flight(date, "", 0, "", 0);
+		DateComparator dc = new DateComparator();
 		if( orderType == ORDERED_BY_DATE_AND_TIME) {
-			int index = Arrays.binarySearch(flights, key);
+			int index = Collections.binarySearch(flights, key);
 			if(index >= 0) {
-				flight = flights[index];
+				flight = flights.get(index);
 			}
 		}
 		else if(orderType == ORDERED_BY_DATE) {
-			int index = Arrays.binarySearch(flights, key, new DateComparator());
+			int index = Collections.binarySearch(flights, key, new DateComparator());
 			if(index >= 0) {
-				flight = flights[index];
+				flight = flights.get(index);
 			}
 		}
 		else {
-			for(int i = 0; i < flights.length && flight == null; i++) {
-				if(flights[i].compareTo(key) == 0) {
-					flight = flights[i];
+			for(int i = 0; i < flights.size() && flight == null; i++) {
+				if(dc.compare(flights.get(i),key) == 0) {
+					flight = flights.get(i);
 				}
 			}
 		}
 		return flight;
 	}
 
+	//my binary search
 	/**
 	 * 
 	 * @param hour
@@ -165,19 +177,31 @@ public class Airport {
 	public Flight searchByTime(double hour) {
 		Flight flight = null;
 		TimeComparator tc = new TimeComparator(); 
+		Flight key = new Flight(new Date(1, 1, 1, hour), "", 0, "", 0);
 		if(orderType == ORDERED_BY_TIME) {
 			int low = 0;
-			int hight = flights.length-1;
-			int mid = (low+hight)/2;
-			//while() {
-				//TODO implementar todo
-			//}
-		}
-		else {
-			for(int i = 0; i < flights.length; i++) {
-				
+			int high = flights.size()-1;
+			while(low <= high && flight == null) {
+				int mid = (low+high)/2;
+				if(tc.compare(key, flights.get(mid)) < 0) {
+					high = mid-1;
+				}
+				else if(tc.compare(key, flights.get(mid)) > 0) {
+					low = mid+1;
+				}
+				else {
+					flight = flights.get(mid);
+				}
 			}
 		}
+		else {
+			for(int i = 0; i < flights.size() && flight == null; i++) {
+				if(tc.compare(key, flights.get(i)) == 0) {
+					flight = flights.get(i);
+				}
+			}
+		}
+		return flight;
 	}
 
 	/**
@@ -187,13 +211,27 @@ public class Airport {
 	public Flight searchByAirline(String airline) {
 		Flight flight = null;
 		Flight key = new Flight(new Date(1,1,1,1), airline, 0, "", 0);
+		AirlineComparator ac = new AirlineComparator();
 		if( orderType == ORDERED_BY_AIRLINE) {
-			
+			int low = 0;
+			int high = flights.size()-1;
+			while(low <= high && flight == null) {
+				int mid = (low+high)/2;
+				if(ac.compare(key, flights.get(mid)) > 0) {
+					low = mid+1;
+				}
+				else if(ac.compare(key, flights.get(mid)) < 0) {
+					high = mid-1;
+				}
+				else {
+					flight = flights.get(mid);
+				}
+			}
 		}
 		else {
-			for(int i = 0; i < flights.length && flight == null; i++) {
-				if(flights[i].compareTo(key) == 0) {
-					flight = flights[i];
+			for(int i = 0; i < flights.size() && flight == null; i++) {
+				if(ac.compare(key, flights.get(i)) == 0) {
+					flight = flights.get(i);
 				}
 			}
 		}
@@ -205,8 +243,33 @@ public class Airport {
 	 * @param flightNumber
 	 */
 	public Flight searchByFlightNumber(int flightNumber) {
-		// TODO - implement Airport.searchByFlightNumber
-		throw new UnsupportedOperationException();
+		Flight key = new Flight(new Date(1, 1, 1, 1), "", flightNumber, "", 0);
+		Flight flight = null;
+		FlightNumberComparator fnc = new FlightNumberComparator();
+		if(orderType == ORDERED_BY_FLIGHT_NUMBER) {
+			int low = 0;
+			int high = flights.size()-1;
+			while(low <= high) {
+				int mid = (low+high)/2;
+				if(fnc.compare(flights.get(mid),key) < 0) {
+					low = mid+1;
+				}
+				else if(fnc.compare(flights.get(mid), key) > 0) {
+					high = mid-1;
+				}
+				else {
+					flight = flights.get(mid);
+				}
+			}
+		}
+		else {
+			for(int i = 0; i < flights.size() && flight == null; i++) {
+				if(fnc.compare(flights.get(i), key) == 0) {
+					flight = flights.get(i);
+				}
+			}
+		}
+		return flight;
 	}
 
 	/**
@@ -214,8 +277,53 @@ public class Airport {
 	 * @param destinationCity
 	 */
 	public Flight searchByDestinationCity(String destinationCity) {
-		// TODO - implement Airport.searchByDestinationCity
-		throw new UnsupportedOperationException();
+		Flight key = new Flight(new Date(1, 1, 1, 1), "", 0, destinationCity, 0);
+		Flight flight = null;
+		DestinationCityComparator dcc = new DestinationCityComparator();
+		if(orderType == ORDERED_BY_DESTINATION_CITY) {
+			int low = 0;
+			int high =flights.size()-1;
+			while(low <= high && flight == null) {
+				int mid = (low+high)/2;
+				if(dcc.compare(flights.get(mid), key) < 0) {
+					low = mid+1;
+				}
+				else if(dcc.compare(flights.get(mid), key) > 0) {
+					high = mid-1;
+				}
+				else {
+					flight = flights.get(mid);
+				}
+			}
+		}
+		else {
+			for(int i = 0; i < flights.size() && flight == null; i++) {
+				if(dcc.compare(key, flights.get(i)) == 0) {
+					flight = flights.get(i);
+				}
+			}
+		}
+		return flight;
+	}
+	
+	public Flight searchByBoardingGates(int bg) {
+		Flight key = new Flight(new Date(1, 1, 1, 1), "", 0, "", bg);
+		Flight flight = null;
+		BoardingGatesComparator bgc = new BoardingGatesComparator();
+		if(orderType == ORDERED_BY_BOARDING_GATES) {
+			int index = Collections.binarySearch(flights, key, bgc);
+			if(index >= 0) {
+				flight = flights.get(index);
+			}
+		}
+		else {
+			for(int i = 0; i < flights.size() && flight == null; i++) {
+				if(bgc.compare(flights.get(i), key) == 0) {
+					flight = flights.get(i);
+				}
+			}
+		}
+		return flight;
 	}
 	
 	public String getRandomCity() throws IOException {
@@ -224,9 +332,10 @@ public class Airport {
 		FileReader fr = new FileReader(file);
 		BufferedReader br = new BufferedReader(fr);
 		String city = br.readLine();
-		int i = 0;
+		int i = 1;
 		while(i <= c) {
 			city = br.readLine();
+			i++;
 		}
 		fr.close();
 		br.close();
@@ -239,9 +348,10 @@ public class Airport {
 		FileReader fr = new FileReader(file);
 		BufferedReader br = new BufferedReader(fr);
 		String airline = br.readLine();
-		int i = 0;
+		int i = 1;
 		while(i <= a) {
 			airline = br.readLine();
+			i++;
 		}
 		fr.close();
 		br.close();

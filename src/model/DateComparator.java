@@ -14,12 +14,30 @@ public class DateComparator implements Comparator<Flight> {
 		Date d1 = f1.getDate();
 		Date d2 = f2.getDate();
 		int comparation = 0;
-		if(d1.compareTo(d2) > 0) {
+		
+		if(d1.getYear() > d2.getYear()) {
 			comparation = 1;
 		}
-		else if(d1.compareTo(d2) < 0) {
+		else if(d1.getYear() < d2.getYear()) {
 			comparation = -1;
 		}
+		else {
+			if(d1.getMonth() > d2.getYear()) {
+				comparation = 1;
+			}
+			else if(d1.getMonth() < d2.getMonth()) {
+				comparation = -1;
+			}
+			else {
+				if(d1.getDay() > d2.getDay()) {
+					comparation = 1;
+				}
+				else if(d1.getDay() < d2.getDay()) {
+					comparation = -1;
+				}
+			}
+		}
+		
 		return comparation;
 	}
 

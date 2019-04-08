@@ -85,9 +85,24 @@ public class Date implements Comparable<Date> {
 				else if(day < date.day ) {
 					comparation = -1;
 				}
+				else {
+					if(hour > date.hour) {
+						comparation = 1;
+					}
+					else if(hour < date.hour) {
+						comparation = -1;
+					}
+				}
 			}
 		}
 		return comparation;
 	}
 
+	@Override
+	public String toString() {
+		String date = ""+day;
+		date += "/"+month;
+		date += "/"+year;
+		return date;
+	}
 }

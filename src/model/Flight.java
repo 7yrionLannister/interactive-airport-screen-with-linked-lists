@@ -83,7 +83,19 @@ public class Flight implements Comparable<Flight> {
 	public void setBoardingGates(int boardingGates) {
 		this.boardingGates = boardingGates;
 	}
-
+	
+	public String getTime() {
+		String time = "";
+		double hour = date.getHour();
+		int hours = (int) (hour%12);
+		if(hours == 0) {
+			hours = 12;
+		}
+		int minutes = (int) ((hour - (int) hour)*60);
+		time = hours + " : " + minutes + " ";
+		time += hour < 12 ? "A.M." : "P.M.";
+		return time;
+	}
 	/**
 	 * 
 	 * @param flight
