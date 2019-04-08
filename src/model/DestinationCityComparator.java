@@ -14,10 +14,10 @@ public class DestinationCityComparator implements Comparator<Flight>{
 		int comparation = 0;
 		String dc1 = f1.getDestinationCity();
 		String dc2 = f2.getDestinationCity();
-		if(dc1.compareTo(dc2) > 0) {
+		if(dc1.compareToIgnoreCase(dc2) > 0) {
 			comparation = 1;
 		}
-		else if(dc1.compareTo(dc2) < 0) {
+		else if(dc1.compareToIgnoreCase(dc2) < 0) {
 			comparation = -1;
 		}
 		return comparation;

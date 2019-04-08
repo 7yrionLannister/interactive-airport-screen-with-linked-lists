@@ -22,7 +22,7 @@ public class DateComparator implements Comparator<Flight> {
 			comparation = -1;
 		}
 		else {
-			if(d1.getMonth() > d2.getYear()) {
+			if(d1.getMonth() > d2.getMonth()) {
 				comparation = 1;
 			}
 			else if(d1.getMonth() < d2.getMonth()) {

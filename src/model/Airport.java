@@ -25,14 +25,28 @@ public class Airport {
 	public final static int ORDERED_BY_BOARDING_GATES = 8;
 	
 	private int orderType;
+	private ArrayList<String> cities;
+	private ArrayList<String> airlines;
 	
 	private ObservableList<Flight> flights;
 	private SecureRandom sr;
 	
 	public Airport(ObservableList<Flight> flights) {
+		//TODO completar para que aui guarde los txt en los ArrayLists y todo sea mas rapidpo
 		sr = new SecureRandom();
 		orderType = DISORGANIZED;
 		this.flights = flights;
+		File file = new File(AIRLINES_PATH);
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String airline = br.readLine();
+		int i = 1;
+		while(airline != null) {
+			airline = br.readLine();
+			i++;
+		}
+		fr.close();
+		br.close();
 	}
 	
 	public ObservableList<Flight> getFlights() {
@@ -48,6 +62,7 @@ public class Airport {
 	}
 
 	public void generateFlightList(int lenght) throws IOException {
+		//TODO Mete los items de los txt en un arraylist para que se demore menos generando
 		orderType = DISORGANIZED;
 		flights.clear();
 		ArrayList<Integer> randomNumbers = new ArrayList<>();
@@ -148,13 +163,13 @@ public class Airport {
 		Flight key = new Flight(date, "", 0, "", 0);
 		DateComparator dc = new DateComparator();
 		if( orderType == ORDERED_BY_DATE_AND_TIME) {
-			int index = Collections.binarySearch(flights, key);
+			int index = Collections.binarySearch(flights, key, dc);
 			if(index >= 0) {
 				flight = flights.get(index);
 			}
 		}
 		else if(orderType == ORDERED_BY_DATE) {System.out.println("estoy aui");
-			int index = Collections.binarySearch(flights, key, new DateComparator());
+			int index = Collections.binarySearch(flights, key, dc);
 			if(index >= 0) {
 				flight = flights.get(index);
 			}
@@ -249,7 +264,7 @@ public class Airport {
 		if(orderType == ORDERED_BY_FLIGHT_NUMBER) {
 			int low = 0;
 			int high = flights.size()-1;
-			while(low <= high) {
+			while(low <= high && flight == null) {
 				int mid = (low+high)/2;
 				if(fnc.compare(flights.get(mid),key) < 0) {
 					low = mid+1;
@@ -326,7 +341,7 @@ public class Airport {
 		return flight;
 	}
 	
-	public String getRandomCity() throws IOException {
+	private String getRandomCity() throws IOException {
 		int c = sr.nextInt(98);
 		File file = new File(CITIES_PATH);
 		FileReader fr = new FileReader(file);
@@ -342,7 +357,7 @@ public class Airport {
 		return city;
 	}
 	
-	public String getRandomAirline() throws IOException {
+	private String getRandomAirline() throws IOException {
 		int a = sr.nextInt(14);
 		File file = new File(AIRLINES_PATH);
 		FileReader fr = new FileReader(file);
