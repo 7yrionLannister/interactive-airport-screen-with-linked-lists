@@ -153,7 +153,7 @@ public class Airport {
 				flight = flights.get(index);
 			}
 		}
-		else if(orderType == ORDERED_BY_DATE) {
+		else if(orderType == ORDERED_BY_DATE) {System.out.println("estoy aui");
 			int index = Collections.binarySearch(flights, key, new DateComparator());
 			if(index >= 0) {
 				flight = flights.get(index);
