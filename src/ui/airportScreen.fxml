@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane minWidth="-Infinity" prefHeight="553.0" prefWidth="758.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.AirportController">
+<BorderPane minWidth="-Infinity" prefHeight="553.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.AirportController">
    <bottom>
       <HBox prefHeight="57.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
          <children>
@@ -95,12 +95,12 @@
    <center>
       <TableView fx:id="page" prefHeight="400.0" prefWidth="599.0" BorderPane.alignment="CENTER">
         <columns>
-            <TableColumn fx:id="timeTableColumn" prefWidth="70.0" sortable="false" text="Time" />
-            <TableColumn fx:id="dateTableColumn" prefWidth="93.0" sortable="false" text="Date" />
-          <TableColumn fx:id="flightTableColumn" prefWidth="93.0" sortable="false" text="Flight" />
-          <TableColumn fx:id="airlineTableColumn" prefWidth="144.0" sortable="false" text="Airline" />
-            <TableColumn fx:id="destinationTableColumn" prefWidth="105.0" sortable="false" text="To" />
-            <TableColumn fx:id="gatesColumn" prefWidth="90.0" sortable="false" text="Boarding gates" />
+            <TableColumn fx:id="timeTableColumn" prefWidth="83.0" sortable="false" text="Time" />
+            <TableColumn fx:id="dateTableColumn" prefWidth="95.0" sortable="false" text="Date" />
+          <TableColumn fx:id="flightTableColumn" prefWidth="91.0" sortable="false" text="Flight" />
+          <TableColumn fx:id="airlineTableColumn" prefWidth="174.0" sortable="false" text="Airline" />
+            <TableColumn fx:id="destinationTableColumn" prefWidth="139.0" sortable="false" text="To" />
+            <TableColumn fx:id="gatesColumn" prefWidth="125.0" sortable="false" text="Boarding gates" />
         </columns>
       </TableView>
    </center>

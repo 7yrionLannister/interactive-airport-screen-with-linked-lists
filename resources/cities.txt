@@ -37,7 +37,7 @@ Novosibirsk
 Daca
 Yangon
 Bangkok
-Han�i
+Chania
 Yakarta
 Kuala Lumpur
 Singapur
@@ -46,7 +46,7 @@ Perth
 Pekin
 Manila
 Shanghai
-Taip�i
+Taipei
 Seul
 Tokio
 Adelaida

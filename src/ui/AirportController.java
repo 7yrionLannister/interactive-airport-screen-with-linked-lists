@@ -156,6 +156,10 @@ public class AirportController {
 	@FXML
 	public void searchFlight(ActionEvent event) {
 		int option = (int) searchCriterionToggleGroup.getSelectedToggle().getUserData();
+		Flight match;
+		long timeBeforeSearch = System.currentTimeMillis();
+		long timeAfterSearch;
+		long timeSearching;
 		switch(option) {
 		case Airport.ORDERED_BY_DATE:
 			String[] input = searchInputTextField.getText().split("/");
@@ -165,8 +169,10 @@ public class AirportController {
 					int month = Integer.parseInt(input[1]);
 					int year = Integer.parseInt(input[2]);
 					Date search = new Date(day, month, year, 0);
-					Flight match = airport.searchByDate(search);
-					showResult(match);
+					match = airport.searchByDate(search);
+					timeAfterSearch = System.currentTimeMillis();
+					timeSearching = timeAfterSearch - timeBeforeSearch;
+					showResult(match, timeSearching);
 				}
 				else {
 					throw new IllegalArgumentException();
@@ -187,8 +193,10 @@ public class AirportController {
 				}
 
 				String key = h + " : " + m + " " +ampm;
-				Flight match = airport.searchByTime(key);
-				showResult(match);
+				match = airport.searchByTime(key);
+				timeAfterSearch = System.currentTimeMillis();
+				timeSearching = timeAfterSearch - timeBeforeSearch;
+				showResult(match, timeSearching);
 			}
 			catch(NullPointerException|ArrayIndexOutOfBoundsException|IllegalArgumentException e) {
 				showDialog("Invalid input: hours : minutes (either A.M. or P.M.)");
@@ -200,20 +208,26 @@ public class AirportController {
 				if(flight <= 0) {
 					throw new IllegalArgumentException();
 				}
-				Flight match = airport.searchByFlightNumber(flight);
-				showResult(match);
+				match = airport.searchByFlightNumber(flight);
+				timeAfterSearch = System.currentTimeMillis();
+				timeSearching = timeAfterSearch - timeBeforeSearch;
+				showResult(match, timeSearching);
 			}
 			catch(IllegalArgumentException iae) {
 				showDialog("Invalid input: Positive integer");
 			}
 			break;
 		case Airport.ORDERED_BY_DESTINATION_CITY:
-			Flight match = airport.searchByDestinationCity(searchInputTextField.getText());
-			showResult(match);
+			match = airport.searchByDestinationCity(searchInputTextField.getText());
+			timeAfterSearch = System.currentTimeMillis();
+			timeSearching = timeAfterSearch - timeBeforeSearch;
+			showResult(match, timeSearching);
 			break;
 		case Airport.ORDERED_BY_AIRLINE:
-			Flight match1 = airport.searchByAirline(searchInputTextField.getText());
-			showResult(match1);
+			match = airport.searchByAirline(searchInputTextField.getText());
+			timeAfterSearch = System.currentTimeMillis();
+			timeSearching = timeAfterSearch - timeBeforeSearch;
+			showResult(match, timeSearching);
 			break;
 		case Airport.ORDERED_BY_BOARDING_GATES:
 			try {
@@ -221,8 +235,10 @@ public class AirportController {
 				if(gates <= 0) {
 					throw new IllegalArgumentException();
 				}
-				Flight match2 = airport.searchByBoardingGates(gates);
-				showResult(match2);
+				match = airport.searchByBoardingGates(gates);
+				timeAfterSearch = System.currentTimeMillis();
+				timeSearching = timeAfterSearch - timeBeforeSearch;
+				showResult(match, timeSearching);
 			}
 			catch(IllegalArgumentException iae) {
 				showDialog("Invalid input: Positive integer");
@@ -267,7 +283,7 @@ public class AirportController {
 		}
 	}
 
-	public void showResult(Flight f) {
+	public void showResult(Flight f, long timeSearching) {
 		if(f != null) {
 			ObservableList<Flight> flightResults = FXCollections.observableArrayList();
 			flightResults.add(f);
@@ -295,7 +311,7 @@ public class AirportController {
 			popUp.setWidth(600);
 			popUp.setHeight(90);
 			popUp.setScene(scene);
-			popUp.setTitle("Result");
+			popUp.setTitle("Result obtained in " + timeSearching + " miliseconds");
 			popUp.setResizable(false);
 			popUp.show();
 		}
