@@ -139,7 +139,7 @@ public class AirportController {
 			int lenght = Integer.parseInt(numberOfFlightsTextField.getText());
 			airport.generateFlightList(lenght);
 		} catch (IOException|NumberFormatException e) {
-			
+
 		}
 	}
 
@@ -162,21 +162,11 @@ public class AirportController {
 		long timeSearching;
 		switch(option) {
 		case Airport.ORDERED_BY_DATE:
-			String[] input = searchInputTextField.getText().split("/");
 			try {
-				if(input.length == 3) {
-					int day = Integer.parseInt(input[0]);
-					int month = Integer.parseInt(input[1]);
-					int year = Integer.parseInt(input[2]);
-					Date search = new Date(day, month, year, 0);
-					match = airport.searchByDate(search);
-					timeAfterSearch = System.currentTimeMillis();
-					timeSearching = timeAfterSearch - timeBeforeSearch;
-					showResult(match, timeSearching);
-				}
-				else {
-					throw new IllegalArgumentException();
-				}
+				match = airport.searchByDate(searchInputTextField.getText());
+				timeAfterSearch = System.currentTimeMillis();
+				timeSearching = timeAfterSearch - timeBeforeSearch;
+				showResult(match, timeSearching);
 			}
 			catch(IllegalArgumentException e) {
 				showDialog("Invalid input: day/month/year");
@@ -205,9 +195,6 @@ public class AirportController {
 		case Airport.ORDERED_BY_FLIGHT_NUMBER:
 			try {
 				int flight = Integer.parseInt(searchInputTextField.getText());
-				if(flight <= 0) {
-					throw new IllegalArgumentException();
-				}
 				match = airport.searchByFlightNumber(flight);
 				timeAfterSearch = System.currentTimeMillis();
 				timeSearching = timeAfterSearch - timeBeforeSearch;
@@ -232,9 +219,6 @@ public class AirportController {
 		case Airport.ORDERED_BY_BOARDING_GATES:
 			try {
 				int gates = Integer.parseInt(searchInputTextField.getText());
-				if(gates <= 0) {
-					throw new IllegalArgumentException();
-				}
 				match = airport.searchByBoardingGates(gates);
 				timeAfterSearch = System.currentTimeMillis();
 				timeSearching = timeAfterSearch - timeBeforeSearch;

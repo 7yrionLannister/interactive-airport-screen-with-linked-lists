@@ -171,9 +171,17 @@ public class Airport {
 	 * 
 	 * @param date
 	 */
-	public Flight searchByDate(Date date) {
+	public Flight searchByDate(String date) throws IllegalArgumentException {
 		Flight flight = null;
-		Flight key = new Flight(date, "", 0, "", 0);
+		String input[] = date.split("/");
+		if(input.length != 3) {
+			throw new IllegalArgumentException();
+		}
+		int day = Integer.parseInt(input[0]);
+		int month = Integer.parseInt(input[1]);
+		int year = Integer.parseInt(input[2]);
+		Date search = new Date(day, month, year, 0);
+		Flight key = new Flight(search, "", 0, "", 0);
 		DateComparator dc = new DateComparator();
 		if( orderType == ORDERED_BY_DATE_AND_TIME) {
 			int index = Collections.binarySearch(flights, key, dc);
@@ -287,7 +295,10 @@ public class Airport {
 	 * 
 	 * @param flightNumber
 	 */
-	public Flight searchByFlightNumber(int flightNumber) {
+	public Flight searchByFlightNumber(int flightNumber) throws IllegalArgumentException {
+		if(flightNumber <= 0) {
+			throw new IllegalArgumentException();
+		}
 		Flight key = new Flight(new Date(1, 1, 1, 1), "", flightNumber, "", 0);
 		Flight flight = null;
 		FlightNumberComparator fnc = new FlightNumberComparator();
@@ -352,6 +363,9 @@ public class Airport {
 	}
 	
 	public Flight searchByBoardingGates(int bg) {
+		if(bg <= 0) {
+			throw new IllegalArgumentException();
+		}
 		Flight key = new Flight(new Date(1, 1, 1, 1), "", 0, "", bg);
 		Flight flight = null;
 		BoardingGatesComparator bgc = new BoardingGatesComparator();
