@@ -3,56 +3,56 @@ Lisboa
 Casablanca
 Londres
 Madrid
-París
+Paris
 Argel
 Bruselas
-Ámsterdam
-Zúrich
-Fráncfort
+Amsterdam
+Zurich
+Francfort
 Oslo
 Roma
 Copenhague
-Berlín
+Berlin
 Estocolmo
 Budapest
 Varsovia
 Ciudad del Cabo
-Sofía
+Sofia
 Atenas
 Helsinki
 Estambul
 Kiev
 El Cairo
-Jerusalén
-Moscú
-Adís Abeba
+Jerusalen
+Moscu
+Addis Ababa
 Yeda
-Teherán
-Dubái
+Teheran
+Dubai
 Kabul
 Karachi
 Delhi
-Katmandú
+Katmandu
 Novosibirsk
 Daca
-Rangún
+Yangon
 Bangkok
-Hanói
+Hanï¿½i
 Yakarta
 Kuala Lumpur
 Singapur
 Hong Kong
 Perth
-Pekín
+Pekin
 Manila
-Shanghái
-Taipéi
-Seúl
+Shanghai
+Taipï¿½i
+Seul
 Tokio
 Adelaida
 Vladivostok
 Guam
-Sídney
+Sidney
 Numea
 Wellington
 Suva
@@ -63,13 +63,13 @@ Anchorage
 Vancouver
 San Francisco
 Seattle
-Los Ángeles
+Los angeles
 Tijuana
 Edmonton
 Phoenix
 Chihuahua
 Denver
-Ciudad de México
+Ciudad de Mexico
 Winnipeg
 Dallas
 Houston
@@ -82,7 +82,7 @@ Lima
 Washington D.C.
 Kingston
 Filadelfia
-Bogotá
+Bogota
 Nueva York
 Boston
 Caracas
@@ -93,6 +93,6 @@ Halifax
 Saint John
 Buenos Aires
 Montevideo
-Río de Janeiro
+Rio de Janeiro
 Fernando de Noronha
 Praia

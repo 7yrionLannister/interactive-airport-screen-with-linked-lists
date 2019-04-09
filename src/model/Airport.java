@@ -31,22 +31,35 @@ public class Airport {
 	private ObservableList<Flight> flights;
 	private SecureRandom sr;
 	
-	public Airport(ObservableList<Flight> flights) {
-		//TODO completar para que aui guarde los txt en los ArrayLists y todo sea mas rapidpo
+	public Airport(ObservableList<Flight> flights) throws IOException {
 		sr = new SecureRandom();
 		orderType = DISORGANIZED;
 		this.flights = flights;
-		File file = new File(AIRLINES_PATH);
-		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
-		String airline = br.readLine();
-		int i = 1;
-		while(airline != null) {
-			airline = br.readLine();
-			i++;
+		
+		cities = new ArrayList<String>();
+		airlines = new ArrayList<String>();
+		
+		File citiesFile = new File(CITIES_PATH);
+		FileReader cfr = new FileReader(citiesFile);
+		BufferedReader cbr = new BufferedReader(cfr);
+		String city = cbr.readLine();
+		while(city != null) {
+			cities.add(city);
+			city = cbr.readLine();
 		}
-		fr.close();
-		br.close();
+		cfr.close();
+		cbr.close();
+		
+		File airlinesFile = new File(AIRLINES_PATH);
+		FileReader afr = new FileReader(airlinesFile);
+		BufferedReader abr = new BufferedReader(afr);
+		String airline = abr.readLine();
+		while(airline != null) {
+			airlines.add(airline);
+			airline = abr.readLine();
+		}
+		afr.close();
+		abr.close();
 	}
 	
 	public ObservableList<Flight> getFlights() {
@@ -62,7 +75,6 @@ public class Airport {
 	}
 
 	public void generateFlightList(int lenght) throws IOException {
-		//TODO Mete los items de los txt en un arraylist para que se demore menos generando
 		orderType = DISORGANIZED;
 		flights.clear();
 		ArrayList<Integer> randomNumbers = new ArrayList<>();
@@ -113,9 +125,10 @@ public class Airport {
 	//selection
 	public void sortByAirline() {
 		AirlineComparator ac = new AirlineComparator();
-		for(int i = 0; i < flights.size(); i++) {
+		int size = flights.size();
+		for(int i = 0; i < size-1; i++) {
 			int low = i;
-			for(int j = i+1; j < flights.size(); j++) {
+			for(int j = i+1; j < size; j++) {
 				if(ac.compare(flights.get(low), flights.get(j)) > 0) {
 					low = j;
 				}
@@ -189,10 +202,27 @@ public class Airport {
 	 * 
 	 * @param hour
 	 */
-	public Flight searchByTime(double hour) {
+	public Flight searchByTime(String hour) {
 		Flight flight = null;
 		TimeComparator tc = new TimeComparator(); 
-		Flight key = new Flight(new Date(1, 1, 1, hour), "", 0, "", 0);
+		
+		int h1 = Integer.parseInt(hour.split(":")[0].trim());
+		int m1 = Integer.parseInt(hour.split(":")[1].substring(0, 3).trim());
+		String ampm1 = hour.trim().toUpperCase().endsWith("A.M.")?"A.M.":"P.M.";
+		
+		if(h1 == 0) {
+			h1 = 12;
+		}
+		
+		double time = m1/60.0;
+		if(ampm1.equalsIgnoreCase("A.M.")) {
+			time += h1==12?0:h1;
+		}
+		else {
+			time += h1==12?12:12+h1;
+		}
+		
+		Flight key = new Flight(new Date(1, 1, 1, time), "", 0, "", 0);
 		if(orderType == ORDERED_BY_TIME) {
 			int low = 0;
 			int high = flights.size()-1;
@@ -341,36 +371,14 @@ public class Airport {
 		return flight;
 	}
 	
-	private String getRandomCity() throws IOException {
-		int c = sr.nextInt(98);
-		File file = new File(CITIES_PATH);
-		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
-		String city = br.readLine();
-		int i = 1;
-		while(i <= c) {
-			city = br.readLine();
-			i++;
-		}
-		fr.close();
-		br.close();
-		return city;
+	private String getRandomCity() {
+		int c = sr.nextInt(cities.size());
+		return cities.get(c);
 	}
 	
-	private String getRandomAirline() throws IOException {
-		int a = sr.nextInt(14);
-		File file = new File(AIRLINES_PATH);
-		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
-		String airline = br.readLine();
-		int i = 1;
-		while(i <= a) {
-			airline = br.readLine();
-			i++;
-		}
-		fr.close();
-		br.close();
-		return airline;
+	private String getRandomAirline() {
+		int a = sr.nextInt(airlines.size());
+		return airlines.get(a);
 	}
 
 }

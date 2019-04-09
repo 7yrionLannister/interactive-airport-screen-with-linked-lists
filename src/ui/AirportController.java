@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
@@ -125,18 +124,22 @@ public class AirportController {
 		airlineSearch.setUserData(Airport.ORDERED_BY_AIRLINE);
 		gatesSearch.setUserData(Airport.ORDERED_BY_BOARDING_GATES);
 
-		airport = new Airport(flights);
+		try {
+			airport = new Airport(flights);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		page.setItems(flights);
 	}
 
 	@FXML
 	public  void generateFlightList(ActionEvent event) {
-		int lenght = Integer.parseInt(numberOfFlightsTextField.getText());
 		try {
+			int lenght = Integer.parseInt(numberOfFlightsTextField.getText());
 			airport.generateFlightList(lenght);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException|NumberFormatException e) {
+			
 		}
 	}
 
@@ -175,17 +178,20 @@ public class AirportController {
 			break;
 		case Airport.ORDERED_BY_TIME:
 			try {
-				//TODO hay que mejorar la busqueda pues por redondeo nunca encuentra nada, la entrada sera horas : minutos AM o PM
-				//TODO esta busqueda tambien requiere modificar el metodo searchByTime de Airport
-				double hour = Double.parseDouble(searchInputTextField.getText());
-				if(hour < 0 || hour > 24) {
-					throw new IllegalArgumentException();
+				int h = Integer.parseInt(searchInputTextField.getText().split(":")[0].trim());
+				int m = Integer.parseInt(searchInputTextField.getText().split(":")[1].substring(0, 3).trim());
+				String ampm = searchInputTextField.getText().trim().endsWith("A.M.")?"A.M.":"P.M.";
+
+				if(h == 0) {
+					h = 12;
 				}
-				Flight match = airport.searchByTime(hour);
+
+				String key = h + " : " + m + " " +ampm;
+				Flight match = airport.searchByTime(key);
 				showResult(match);
 			}
-			catch(NullPointerException|IllegalArgumentException e) {
-				showDialog("Invalid input: Non negative real number between 0 and 24 with a period as decimal separator");
+			catch(NullPointerException|ArrayIndexOutOfBoundsException|IllegalArgumentException e) {
+				showDialog("Invalid input: hours : minutes (either A.M. or P.M.)");
 			}
 			break;
 		case Airport.ORDERED_BY_FLIGHT_NUMBER:
@@ -202,10 +208,12 @@ public class AirportController {
 			}
 			break;
 		case Airport.ORDERED_BY_DESTINATION_CITY:
-
+			Flight match = airport.searchByDestinationCity(searchInputTextField.getText());
+			showResult(match);
 			break;
 		case Airport.ORDERED_BY_AIRLINE:
-			airport.sortByAirline();
+			Flight match1 = airport.searchByAirline(searchInputTextField.getText());
+			showResult(match1);
 			break;
 		case Airport.ORDERED_BY_BOARDING_GATES:
 			try {
@@ -213,8 +221,8 @@ public class AirportController {
 				if(gates <= 0) {
 					throw new IllegalArgumentException();
 				}
-				Flight match = airport.searchByBoardingGates(gates);
-				showResult(match);
+				Flight match2 = airport.searchByBoardingGates(gates);
+				showResult(match2);
 			}
 			catch(IllegalArgumentException iae) {
 				showDialog("Invalid input: Positive integer");
