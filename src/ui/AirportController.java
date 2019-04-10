@@ -19,7 +19,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import model.Airport;
-import model.Date;
 import model.Flight;
 
 public class AirportController {
@@ -333,7 +332,7 @@ public class AirportController {
 		int toIndex = Math.min(fromIndex + ITEMS_PER_PAGE, flights.size());
 		ObservableList<Flight> pageItems = FXCollections.observableArrayList(flights.subList(fromIndex, toIndex));
 		page.setItems(pageItems);
-		if(pageItems.size() >= ITEMS_PER_PAGE) {
+		if(toIndex < flights.size()) {
 			nextButton.setDisable(false);
 		}
 		else {
