@@ -7,61 +7,91 @@ public class Date implements Comparable<Date> {
 	private int year;
 	private double hour;
 
-	public Date(int day, int month, int year, double hour) {
-		this.day = day;
-		this.month = month;
-		this.year = year;
-		this.hour = hour;
+	/**The method allows to create an instance of Date with the specified day, month, year and hour
+	 * @param day The day must be between 1 and 31
+	 * @param month The month must be between 1 and 12
+	 * @param year The year must be any value supported by <b>int</b> as the time is undetermined
+	 * @param hour The hour must be between 0 and 24
+	 * */
+	public Date(int day, int month, int year, double hour) throws IllegalArgumentException {
+		setDay(day);
+		setMonth(month);
+		setYear(year);
+		setHour(hour);
 	}
 
+	/**The method allows to obtain the day
+	 * @return The day for this date
+	 * */
 	public int getDay() {
 		return this.day;
 	}
 
-	/**
-	 * 
-	 * @param day
+	/**The method allows to change the current day
+	 * @param day The day must be between 1 and 31
 	 */
-	public void setDay(int day) {
+	public void setDay(int day) throws IllegalArgumentException {
+		if(day < 1 || day > 31) {
+			throw new IllegalArgumentException("Invalid day: " + day);
+		}
 		this.day = day;
 	}
 
+	/**The method allows to obtain the month
+	 * @return The month for this date
+	 * */
 	public int getMonth() {
 		return this.month;
 	}
 
-	/**
-	 * 
-	 * @param month
+	/**The method allows to change the current month
+	 * @param month The month must be between 1 and 12
 	 */
-	public void setMonth(int month) {
+	public void setMonth(int month) throws IllegalArgumentException {
+		if(month < 1 || month > 12) {
+			throw new IllegalArgumentException("Invalid month: " + month);
+		}
 		this.month = month;
 	}
 
+	/**The method allows to obtain the year
+	 * @return The year for this date
+	 * */
 	public int getYear() {
 		return this.year;
 	}
 
-	/**
-	 * 
-	 * @param year
+	/**The method allows to change the current year
+	 * @param year The year must be any value supported by <b>int</b> as the time is undetermined
 	 */
 	public void setYear(int year) {
 		this.year = year;
 	}
 
+	/**The method allows to obtain the hour
+	 * @return The hour for this date
+	 * */
 	public double getHour() {
 		return this.hour;
 	}
 
-	/**
-	 * 
-	 * @param hour
+	/**The method allows to change the current hour
+	 * @param hour The hour must be between 0 and 24
 	 */
-	public void setHour(double hour) {
+	public void setHour(double hour) throws IllegalArgumentException {
+		if(hour < 0 || hour > 24) {
+			throw new IllegalArgumentException("Invalid hour: " + hour);
+		}
 		this.hour = hour;
 	}
 
+	/**The method allows knowing when this date is equal, greater or less than another date without taking into account the time<br>
+	 * It defines the natural order for Date
+	 * @param date The date to compare this date
+	 * @return -1 if this date is less than the other<br>
+	 * 1 if this date is greater than the other<br>
+	 * 0 if the two dates are equal 
+	 * */
 	@Override
 	public int compareTo(Date date) {
 		int comparation = 0;
@@ -98,6 +128,9 @@ public class Date implements Comparable<Date> {
 		return comparation;
 	}
 
+	/**The method allows to obtain a String representation of this date
+	 * @return A String representing this date object
+	 * */
 	@Override
 	public String toString() {
 		String date = ""+day;

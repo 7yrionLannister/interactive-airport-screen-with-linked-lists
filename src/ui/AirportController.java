@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -23,6 +24,14 @@ import model.Flight;
 
 public class AirportController {
 
+	public final static int ITEMS_PER_PAGE = 18;
+	
+	@FXML
+	private Button nextButton;
+	
+	@FXML
+	private Button previousButton;
+	
 	@FXML
 	private TableView<Flight> page;
 
@@ -98,9 +107,13 @@ public class AirportController {
 	private ObservableList<Flight> flights;
 
 	private Airport airport;
+	
+	private int currentPage;
 
 	@FXML
 	public void initialize() {
+		currentPage = 0;
+		
 		flights = FXCollections.observableArrayList();
 		timeTableColumn.setCellValueFactory(new PropertyValueFactory<Flight, String>("time"));
 		dateTableColumn.setCellValueFactory(new PropertyValueFactory<Flight, String>("date"));
@@ -129,8 +142,6 @@ public class AirportController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		page.setItems(flights);
 	}
 
 	@FXML
@@ -141,16 +152,19 @@ public class AirportController {
 		} catch (IOException|NumberFormatException e) {
 
 		}
+		setupPage();
 	}
 
 	@FXML
 	public void nextPage(ActionEvent event) {
-
+		currentPage += 1;
+		setupPage();
 	}
 
 	@FXML
 	public void previousPage(ActionEvent event) {
-
+		currentPage -= 1;
+		setupPage();
 	}
 
 	@FXML
@@ -257,6 +271,7 @@ public class AirportController {
 			airport.sortByBoardingGates();
 			break;
 		}
+		setupPage();
 	}
 
 	@FXML
@@ -311,6 +326,26 @@ public class AirportController {
 		Window window = dialog.getDialogPane().getScene().getWindow();
 		window.setOnCloseRequest(event -> window.hide());
 		dialog.showAndWait();
+	}
+
+	public void setupPage() {
+		int fromIndex = currentPage * ITEMS_PER_PAGE;
+		int toIndex = Math.min(fromIndex + ITEMS_PER_PAGE, flights.size());
+		ObservableList<Flight> pageItems = FXCollections.observableArrayList(flights.subList(fromIndex, toIndex));
+		page.setItems(pageItems);
+		if(pageItems.size() >= ITEMS_PER_PAGE) {
+			nextButton.setDisable(false);
+		}
+		else {
+			nextButton.setDisable(true);
+		}
+		
+		if(fromIndex != 0) {
+			previousButton.setDisable(false);
+		}
+		else {
+			previousButton.setDisable(true);
+		}
 	}
 }
 
