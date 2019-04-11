@@ -247,6 +247,7 @@ public class AirportController {
 	@FXML
 	public void sortFlights(ActionEvent event) {
 		int option = (int) sortCriterionToggleGroup.getSelectedToggle().getUserData();
+		long timeBeforeSorting = System.currentTimeMillis();
 		switch(option) {
 		case Airport.ORDERED_BY_DATE_AND_TIME:
 			airport.sortByDateAndTime();
@@ -270,7 +271,9 @@ public class AirportController {
 			airport.sortByBoardingGates();
 			break;
 		}
+		long timeAfterSorting = System.currentTimeMillis();
 		setupPage();
+		showDialog("Time sorting: " + (timeAfterSorting-timeBeforeSorting) + " miliseconds");
 	}
 
 	@FXML
@@ -321,7 +324,12 @@ public class AirportController {
 	public void showDialog(String message) {
 		Dialog dialog = new Dialog();
 		dialog.setContentText(message);
-		dialog.setTitle("Invalid input");
+		if(message.substring(0, 4).equalsIgnoreCase("time")) {
+			dialog.setTitle("Time sorting");
+		}
+		else {
+			dialog.setTitle("Invalid input");
+		}
 		Window window = dialog.getDialogPane().getScene().getWindow();
 		window.setOnCloseRequest(event -> window.hide());
 		dialog.showAndWait();
