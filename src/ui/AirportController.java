@@ -189,7 +189,7 @@ public class AirportController {
 			try {
 				int h = Integer.parseInt(searchInputTextField.getText().split(":")[0].trim());
 				int m = Integer.parseInt(searchInputTextField.getText().split(":")[1].substring(0, 3).trim());
-				String ampm = searchInputTextField.getText().trim().endsWith("A.M.")?"A.M.":"P.M.";
+				String ampm = searchInputTextField.getText().toUpperCase().trim().endsWith("A.M.")?"A.M.":"P.M.";
 
 				if(h == 0) {
 					h = 12;
@@ -326,6 +326,9 @@ public class AirportController {
 		dialog.setContentText(message);
 		if(message.substring(0, 4).equalsIgnoreCase("time")) {
 			dialog.setTitle("Time sorting");
+		}
+		else if(message.substring(0, 4).equalsIgnoreCase("your")) {
+			dialog.setTitle("Unsuccessful search");
 		}
 		else {
 			dialog.setTitle("Invalid input");

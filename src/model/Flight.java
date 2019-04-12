@@ -80,7 +80,6 @@ public class Flight implements Comparable<Flight> {
 	}
 
 	/**The method allows to obtain the total number of boarding gates for the flight
-	 * 
 	 * @return The number of boarding gates
 	 * */
 	public int getBoardingGates() {
@@ -107,7 +106,7 @@ public class Flight implements Comparable<Flight> {
 		if(hours == 0) {
 			hours = 12;
 		}
-		int minutes = (int) ((hour - (int) hour)*60);
+		int minutes = (int) ((hour - (int) hour)*60.0);
 		time = hours + " : " + minutes + " ";
 		time += hour < 12 ? "A.M." : "P.M.";
 		return time;

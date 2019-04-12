@@ -14,11 +14,9 @@ import javafx.collections.ObservableList;
 class AirportTest {
 
 	private Airport airport;
-	private ObservableList<Flight> flights;
 	
 	public void setupScenary1() {
 		airport = null;
-		flights = FXCollections.observableArrayList();
 	}
 	
 	@Test
@@ -26,7 +24,7 @@ class AirportTest {
 		setupScenary1();
 		
 		try {
-			airport = new Airport(flights);
+			airport = new Airport(FXCollections.observableArrayList());
 		} catch (IOException e) {
 			fail("The airport should have been created");
 		}
@@ -36,7 +34,7 @@ class AirportTest {
 	public void generateFlightListTest() {
 		createAirportTest();
 		try {
-			airport.generateFlightList(100);
+			airport.generateFlightList(4000);
 		} catch (IOException e) {
 			fail("The flights list should have been generated");
 		}
@@ -45,7 +43,7 @@ class AirportTest {
 	@Test
 	public void sortTest() {
 		generateFlightListTest();
-		
+		ObservableList<Flight> flights = airport.getFlights();
 		DateComparator dc= new DateComparator();
 		TimeComparator tc = new TimeComparator();
 		AirlineComparator ac = new AirlineComparator();
@@ -91,21 +89,16 @@ class AirportTest {
 	
 	@Test
 	public void searchTest() {
-		createAirportTest();
-		try {
-			airport.generateFlightList(2000);
-		} catch (IOException e) {
-			fail("The flights list should have been generated");
-		}
+		generateFlightListTest();
 		Flight flightToSearch = airport.getFlights().get(222);
 		String date = flightToSearch.getDate().toString();
 		String time = flightToSearch.getTime();
-		String airline = flightToSearch.getAirline();System.out.println(airline);
+		String airline = flightToSearch.getAirline();
 		int flightNumber = flightToSearch.getFlightNumber();
 		String city = flightToSearch.getDestinationCity();
 		int gates = flightToSearch.getBoardingGates();
 		
-		Flight found = airport.searchByDate(date);System.out.println(found);
+		Flight found = airport.searchByDate(date);
 		assertNotNull("The algorithm should have found a flight", found);
 		assertTrue("The flight found does not have the date searched", date.equals(found.getDate().toString()));
 		
@@ -116,19 +109,19 @@ class AirportTest {
 		double diff = Math.floor(Math.abs(timeFound-timeSearched));
 		assertTrue("The flight found does not have the time searched", diff == 0);
 		
-		found = airport.searchByAirline(airline);System.out.println(found);
+		found = airport.searchByAirline(airline);
 		assertNotNull("The algorithm should have found a flight", found);
 		assertTrue("The flight found does not have the airline searched", airline.equals(found.getAirline()));
 		
-		found = airport.searchByFlightNumber(flightNumber);System.out.println(found);
+		found = airport.searchByFlightNumber(flightNumber);
 		assertNotNull("The algorithm should have found a flight", found);
 		assertTrue("The flight found does not have the number searched", flightNumber == found.getFlightNumber());
 		
-		found = airport.searchByDestinationCity(city);System.out.println(found);
+		found = airport.searchByDestinationCity(city);
 		assertNotNull("The algorithm should have found a flight", found);
 		assertTrue("The flight found does not have the city searched", city.equals(found.getDestinationCity()));
 		
-		found = airport.searchByBoardingGates(gates);System.out.println(found);
+		found = airport.searchByBoardingGates(gates);
 		assertNotNull("The algorithm should have found a flight", found);
 		assertTrue("The flight found does not have the number of boarding gates searched", gates == found.getBoardingGates());
 	}

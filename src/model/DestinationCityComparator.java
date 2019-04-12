@@ -4,11 +4,6 @@ import java.util.Comparator;
 
 public class DestinationCityComparator implements Comparator<Flight>{
 
-	/**
-	 * 
-	 * @param f1
-	 * @param f2
-	 */
 	@Override
 	public int compare(Flight f1, Flight f2) {
 		int comparation = 0;

@@ -31,6 +31,9 @@ public class Airport {
 	private ObservableList<Flight> flights;
 	private SecureRandom sr;
 	
+	/**The method allows to create an instance of Airport with the specified list of flights
+	 * @param flights The list of flights that the airport will have
+	 * */
 	public Airport(ObservableList<Flight> flights) throws IOException {
 		sr = new SecureRandom();
 		orderType = DISORGANIZED;
@@ -62,18 +65,22 @@ public class Airport {
 		abr.close();
 	}
 	
+	/**The method allows to obtain the list of flights
+	 * @return The list of flights of this airport
+	 * */
 	public ObservableList<Flight> getFlights() {
 		return flights;
 	}
 
-	/**
-	 * 
-	 * @param flights
+	/**The method allows to change the current list of flights 
+	 * @param flights The new list of flights
 	 */
 	public void setFlights(ObservableList<Flight> flights) {
 		this.flights = flights;
 	}
 
+	/**The method allows to fill the list of flights with "length" randomly generated flights
+	 * */
 	public void generateFlightList(int lenght) throws IOException {
 		orderType = DISORGANIZED;
 		flights.clear();
@@ -96,18 +103,23 @@ public class Airport {
 		}
 	}
 
+	/**The method allows to organize the flights in ascending order according to its date and time
+	 * */
 	public void sortByDateAndTime() {
 		Collections.sort(flights);
 		orderType = ORDERED_BY_DATE_AND_TIME;
 	}
 
+	/**The method allows to organize the flights in ascending order according to its date
+	 * */
 	public void sortByDate() {
 		DateComparator dc = new DateComparator();
 		Collections.sort(flights, dc);
 		orderType = ORDERED_BY_DATE;
 	}
 
-	//bubble
+	/**The method allows to organize the flights in ascending order according to its time
+	 * */
 	public void sortByTime() {
 		TimeComparator tc = new TimeComparator();
 		for(int i = 0; i < flights.size(); i++) {
@@ -122,7 +134,8 @@ public class Airport {
 		orderType = ORDERED_BY_TIME;
 	}
 
-	//selection
+	/**The method allows to organize the flights in ascending order according to its airline
+	 * */
 	public void sortByAirline() {
 		AirlineComparator ac = new AirlineComparator();
 		int size = flights.size();
@@ -140,7 +153,8 @@ public class Airport {
 		orderType = ORDERED_BY_AIRLINE;
 	}
 
-	//insertion
+	/**The method allows to organize the flights in ascending order according to its flight number
+	 * */
 	public void sortByFlightNumber() {
 		FlightNumberComparator fnc = new FlightNumberComparator();
 		for(int i = 1; i < flights.size(); i++) {
@@ -155,22 +169,25 @@ public class Airport {
 		orderType = ORDERED_BY_FLIGHT_NUMBER;
 	}
 
+	/**The method allows to organize the flights in ascending order according to its destination city
+	 * */
 	public void sortByDestinationCity() {
 		DestinationCityComparator dcc = new DestinationCityComparator();
 		Collections.sort(flights, dcc);
 		orderType = ORDERED_BY_DESTINATION_CITY;
 	}
 
+	/**The method allows to organize the flights in ascending order according to its number of boarding gates
+	 * */
 	public void sortByBoardingGates() {
 		Collections.sort(flights, new BoardingGatesComparator());
 		orderType = ORDERED_BY_BOARDING_GATES;
 	}
 	
-	//Collections.binarySearch
-	/**
-	 * 
-	 * @param date
-	 */
+	/**The method allows to search a flight with the specified date
+	 * @param date The departure date criterion
+	 * @return The flight that matches the criterion or null if there are not matches
+	 * */
 	public Flight searchByDate(String date) throws IllegalArgumentException {
 		Flight flight = null;
 		String input[] = date.split("/");
@@ -189,7 +206,7 @@ public class Airport {
 				flight = flights.get(index);
 			}
 		}
-		else if(orderType == ORDERED_BY_DATE) {System.out.println("estoy aui");
+		else if(orderType == ORDERED_BY_DATE) {
 			int index = Collections.binarySearch(flights, key, dc);
 			if(index >= 0) {
 				flight = flights.get(index);
@@ -205,18 +222,17 @@ public class Airport {
 		return flight;
 	}
 
-	//my binary search
-	/**
-	 * 
-	 * @param hour
-	 */
+	/**The method allows to search a flight with the specified time
+	 * @param hour The time criterion
+	 * @return The flight that matches the criterion or null if there are not matches
+	 * */
 	public Flight searchByTime(String hour) {
 		Flight flight = null;
 		TimeComparator tc = new TimeComparator(); 
 		
 		int h1 = Integer.parseInt(hour.split(":")[0].trim());
 		int m1 = Integer.parseInt(hour.split(":")[1].substring(0, 3).trim());
-		String ampm1 = hour.trim().toUpperCase().endsWith("A.M.")?"A.M.":"P.M.";
+		String ampm1 = hour.toUpperCase().trim().endsWith("A.M.")?"A.M.":"P.M.";
 		
 		if(h1 == 0) {
 			h1 = 12;
@@ -257,10 +273,10 @@ public class Airport {
 		return flight;
 	}
 
-	/**
-	 * 
-	 * @param airline
-	 */
+	/**The method allows to search a flight with the specified airline
+	 * @param airline The airline criterion
+	 * @return The flight that matches the criterion or null if there are not matches
+	 * */
 	public Flight searchByAirline(String airline) {
 		Flight flight = null;
 		Flight key = new Flight(new Date(1,1,1,1), airline, 0, "", 0);
@@ -291,10 +307,10 @@ public class Airport {
 		return flight;
 	}
 
-	/**
-	 * 
-	 * @param flightNumber
-	 */
+	/**The method allows to search a flight with the specified flight number
+	 * @param flightNumber The flight number criterion
+	 * @return The flight that matches the criterion or null if there are not matches
+	 * */
 	public Flight searchByFlightNumber(int flightNumber) throws IllegalArgumentException {
 		if(flightNumber <= 0) {
 			throw new IllegalArgumentException();
@@ -328,10 +344,10 @@ public class Airport {
 		return flight;
 	}
 
-	/**
-	 * 
-	 * @param destinationCity
-	 */
+	/**The method allows to search a flight with the specified destination city
+	 * @param destinationCity The destination city criterion
+	 * @return The flight that matches the criterion or null if there are not matches
+	 * */
 	public Flight searchByDestinationCity(String destinationCity) {
 		Flight key = new Flight(new Date(1, 1, 1, 1), "", 0, destinationCity, 0);
 		Flight flight = null;
@@ -362,6 +378,10 @@ public class Airport {
 		return flight;
 	}
 	
+	/**The method allows to search a flight with the specified boarding gates
+	 * @param bg The number of boarding gates criterion
+	 * @return The flight that matches the criterion or null if there are not matches
+	 * */
 	public Flight searchByBoardingGates(int bg) {
 		if(bg <= 0) {
 			throw new IllegalArgumentException();
@@ -385,11 +405,17 @@ public class Airport {
 		return flight;
 	}
 	
+	/**The method allows to obtain a randomly selected city from a text file
+	 * @return A randomly selected city
+	 * */
 	private String getRandomCity() {
 		int c = sr.nextInt(cities.size());
 		return cities.get(c);
 	}
 	
+	/**The method allows to obtain a randomly selected airline from a text file
+	 * @return A randomly selected airline
+	 * */
 	private String getRandomAirline() {
 		int a = sr.nextInt(airlines.size());
 		return airlines.get(a);

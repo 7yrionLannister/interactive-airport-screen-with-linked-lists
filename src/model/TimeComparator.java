@@ -3,12 +3,7 @@ package model;
 import java.util.Comparator;
 
 public class TimeComparator implements Comparator<Flight> {
-
-	/**
-	 * 
-	 * @param f1
-	 * @param f2
-	 */
+	
 	@Override
 	public int compare(Flight f1, Flight f2) {
 		int comparation = 0;
@@ -16,7 +11,7 @@ public class TimeComparator implements Comparator<Flight> {
 		String t2 = f2.getTime();
 		int h1 = Integer.parseInt(t1.split(":")[0].trim());
 		int m1 = Integer.parseInt(t1.split(":")[1].substring(0, 3).trim());
-		String ampm1 = t1.trim().endsWith("A.M.")?"A.M.":"P.M.";
+		String ampm1 = t1.trim().toUpperCase().endsWith("A.M.")?"A.M.":"P.M.";
 		
 		if(h1 == 0) {
 			h1 = 12;
@@ -24,7 +19,7 @@ public class TimeComparator implements Comparator<Flight> {
 		
 		int h2 = Integer.parseInt(t2.split(":")[0].trim());
 		int m2 = Integer.parseInt(t2.split(":")[1].substring(0, 3).trim());
-		String ampm2 = t2.trim().endsWith("A.M.")?"A.M.":"P.M.";
+		String ampm2 = t2.trim().toUpperCase().endsWith("A.M.")?"A.M.":"P.M.";
 		
 		if(h2 == 0) {
 			h2 = 12;
