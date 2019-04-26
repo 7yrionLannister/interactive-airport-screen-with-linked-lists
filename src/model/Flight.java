@@ -7,6 +7,9 @@ public class Flight implements Comparable<Flight> {
 	private int flightNumber;
 	private String destinationCity;
 	private int boardingGates;
+	
+	private Flight next;
+	private Flight prev;
 
 	/**The method allows to create an instance of flight with the corresponding characteristics
 	 * @param date The date when the flight departs
@@ -129,6 +132,22 @@ public class Flight implements Comparable<Flight> {
 			comparation = -1;
 		}
 		return comparation;
+	}
+
+	public Flight getNext() {
+		return next;
+	}
+
+	public void setNext(Flight next) {
+		this.next = next;
+	}
+
+	public Flight getPrev() {
+		return prev;
+	}
+
+	public void setPrev(Flight prev) {
+		this.prev = prev;
 	}
 
 }

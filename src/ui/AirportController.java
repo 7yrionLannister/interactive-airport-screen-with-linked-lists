@@ -113,7 +113,8 @@ public class AirportController {
 	public void initialize() {
 		currentPage = 0;
 		
-		flights = FXCollections.observableArrayList();
+		setupFlights();
+		
 		timeTableColumn.setCellValueFactory(new PropertyValueFactory<Flight, String>("time"));
 		dateTableColumn.setCellValueFactory(new PropertyValueFactory<Flight, String>("date"));
 		flightTableColumn.setCellValueFactory(new PropertyValueFactory<Flight, Integer>("flightNumber"));
@@ -137,7 +138,7 @@ public class AirportController {
 		gatesSearch.setUserData(Airport.ORDERED_BY_BOARDING_GATES);
 
 		try {
-			airport = new Airport(flights);
+			airport = new Airport();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -356,6 +357,10 @@ public class AirportController {
 		else {
 			previousButton.setDisable(true);
 		}
+	}
+	
+	public void setupFlights() {
+		flights = FXCollections.observableArrayList();
 	}
 }
 

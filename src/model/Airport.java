@@ -8,6 +8,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Airport {
@@ -68,21 +69,20 @@ public class Airport {
 	 * @return The list of flights of this airport
 	 * */
 	public ObservableList<Flight> getFlights() {
+		ObservableList<Flight> flights = FXCollections.observableArrayList();
+		Flight current = firstFlight;
+		while(current != null) {
+			flights.add(current);
+			current = current.getNext();
+		}
 		return flights;
-	}
-
-	/**The method allows to change the current list of flights 
-	 * @param flights The new list of flights
-	 */
-	public void setFlights(ObservableList<Flight> flights) {
-		this.flights = flights;
 	}
 
 	/**The method allows to fill the list of flights with "length" randomly generated flights
 	 * */
 	public void generateFlightList(int lenght) throws IOException {
 		orderType = DISORGANIZED;
-		flights.clear();
+		firstFlight = null;
 		ArrayList<Integer> randomNumbers = new ArrayList<>();
 		for(int i = 0; i < lenght; i++) {
 			int day = sr.nextInt(31) + 1;
@@ -98,8 +98,25 @@ public class Airport {
 			String destinationCity = getRandomCity();
 			int boardingGates = 1 + sr.nextInt(10);
 			
-			flights.add( new Flight(date, airline, flightNumber, destinationCity, boardingGates));
+			addFlight(date, airline, flightNumber, destinationCity, boardingGates);
 		}
+	}
+
+	private void addFlight(Date date, String airline, int flightNumber, String destinationCity, int boardingGates) {
+		 Flight addMe = new Flight(date, airline, flightNumber, destinationCity, boardingGates);
+		 if(firstFlight == null) {
+			 firstFlight = addMe;
+			 firstFlight.setNext(firstFlight);
+			 firstFlight.setPrev(firstFlight);
+		 } else {
+			 Flight last = firstFlight.getPrev();
+			 
+			 last.setNext(addMe);
+			 addMe.setPrev(last);
+			 
+			 firstFlight.setPrev(addMe);
+			 addMe.setNext(firstFlight);
+		 }
 	}
 
 	/**The method allows to organize the flights in ascending order according to its date and time
