@@ -28,16 +28,15 @@ public class Airport {
 	private ArrayList<String> cities;
 	private ArrayList<String> airlines;
 	
-	private ObservableList<Flight> flights;
+	private Flight firstFlight;
 	private SecureRandom sr;
 	
 	/**The method allows to create an instance of Airport with the specified list of flights
 	 * @param flights The list of flights that the airport will have
 	 * */
-	public Airport(ObservableList<Flight> flights) throws IOException {
+	public Airport() throws IOException {
 		sr = new SecureRandom();
 		orderType = DISORGANIZED;
-		this.flights = flights;
 		
 		cities = new ArrayList<String>();
 		airlines = new ArrayList<String>();
