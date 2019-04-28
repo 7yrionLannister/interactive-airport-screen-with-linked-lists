@@ -106,23 +106,20 @@ public class Airport {
 		 Flight addMe = new Flight(date, airline, flightNumber, destinationCity, boardingGates);
 		 if(firstFlight == null) {
 			 firstFlight = addMe;
-			 firstFlight.setNext(firstFlight);
-			 firstFlight.setPrev(firstFlight);
 		 } else {
-			 Flight last = firstFlight.getPrev();
-			 
-			 last.setNext(addMe);
-			 addMe.setPrev(last);
-			 
-			 firstFlight.setPrev(addMe);
-			 addMe.setNext(firstFlight);
+			 Flight current = firstFlight;
+			 while(current.getNext() != null) {
+				 current = current.getNext();
+			 }
+			 current.setNext(addMe);
+			 addMe.setPrev(current);
 		 }
 	}
 
 	/**The method allows to organize the flights in ascending order according to its date and time
 	 * */
 	public void sortByDateAndTime() {
-		Collections.sort(flights);
+		Collections.sort(getFlights());
 		orderType = ORDERED_BY_DATE_AND_TIME;
 	}
 
@@ -130,29 +127,67 @@ public class Airport {
 	 * */
 	public void sortByDate() {
 		DateComparator dc = new DateComparator();
-		Collections.sort(flights, dc);
+		Collections.sort(getFlights(), dc);
 		orderType = ORDERED_BY_DATE;
 	}
 
 	/**The method allows to organize the flights in ascending order according to its time
 	 * */
 	public void sortByTime() {
+		//FIXME soy un asco, arreglame y usa bien los nodos auxiliares, no los tomes en cuenta en el ordenamiento
+		//      significa que no los tomes en cuenta en el ordenamiento, ve desde la posicion 1 hasta la penultima posicion
 		TimeComparator tc = new TimeComparator();
-		for(int i = 0; i < flights.size(); i++) {
-			for(int j = 0; j < flights.size()-1-i; j++) {
-				if(tc.compare(flights.get(j), flights.get(j+1)) > 0) {
-					Flight temp = flights.get(j);
-					flights.set(j, flights.get(j+1));
-					flights.set(j+1, temp);
+		int flights = getNumberOfFlights();
+		addAuxiliaries();
+		for(int i = 0; i < flights; i++) {
+			for(int j = 0; j < flights-1-i; j++) {
+				Flight inf = getFlight(j);
+				Flight sup = inf.getNext();
+				if(tc.compare(inf, sup) > 0) {
+					//TODO intercambiar
+					sup.getNext().setPrev(inf);
+					inf.setNext(sup.getNext());
+					inf.getPrev().setNext(sup);
+					sup.setPrev(inf.getPrev());
+					inf.setPrev(sup);
+					sup.setNext(inf);
 				}
 			}
 		}
+		removeAuxiliaries();
 		orderType = ORDERED_BY_TIME;
+	}
+
+	private void removeAuxiliaries() {
+		//TODO implementame plox
+	}
+
+	private void addAuxiliaries() {
+		//TODO implementame plox
+	}
+
+	private Flight getFlight(int index) {
+		Flight current = firstFlight;
+		while(index > 0) {
+			current = current.getNext();
+			index--;
+		}	
+		return current;
+	}
+
+	private int getNumberOfFlights() {
+		Flight current = firstFlight;
+		int num = 0;
+		while(current != null) {
+			num++;
+			current = current.getNext();
+		}
+		return num;
 	}
 
 	/**The method allows to organize the flights in ascending order according to its airline
 	 * */
-	public void sortByAirline() {
+	/*public void sortByAirline() {
 		AirlineComparator ac = new AirlineComparator();
 		int size = flights.size();
 		for(int i = 0; i < size-1; i++) {
@@ -167,11 +202,11 @@ public class Airport {
 			flights.set(i, temp);
 		}
 		orderType = ORDERED_BY_AIRLINE;
-	}
+	}*/
 
 	/**The method allows to organize the flights in ascending order according to its flight number
 	 * */
-	public void sortByFlightNumber() {
+	/*public void sortByFlightNumber() {
 		FlightNumberComparator fnc = new FlightNumberComparator();
 		for(int i = 1; i < flights.size(); i++) {
 			Flight current = flights.get(i);
@@ -183,28 +218,28 @@ public class Airport {
 			flights.set(j+1, current);
 		}
 		orderType = ORDERED_BY_FLIGHT_NUMBER;
-	}
+	}*/
 
 	/**The method allows to organize the flights in ascending order according to its destination city
 	 * */
-	public void sortByDestinationCity() {
+	/*public void sortByDestinationCity() {
 		DestinationCityComparator dcc = new DestinationCityComparator();
 		Collections.sort(flights, dcc);
 		orderType = ORDERED_BY_DESTINATION_CITY;
-	}
+	}*/
 
 	/**The method allows to organize the flights in ascending order according to its number of boarding gates
 	 * */
-	public void sortByBoardingGates() {
+	/*public void sortByBoardingGates() {
 		Collections.sort(flights, new BoardingGatesComparator());
 		orderType = ORDERED_BY_BOARDING_GATES;
-	}
+	}*/
 	
 	/**The method allows to search a flight with the specified date
 	 * @param date The departure date criterion
 	 * @return The flight that matches the criterion or null if there are not matches
 	 * */
-	public Flight searchByDate(String date) throws IllegalArgumentException {
+	/*public Flight searchByDate(String date) throws IllegalArgumentException {
 		Flight flight = null;
 		String input[] = date.split("/");
 		if(input.length != 3) {
@@ -236,13 +271,13 @@ public class Airport {
 			}
 		}
 		return flight;
-	}
+	}*/
 
 	/**The method allows to search a flight with the specified time
 	 * @param hour The time criterion
 	 * @return The flight that matches the criterion or null if there are not matches
 	 * */
-	public Flight searchByTime(String hour) {
+	/*public Flight searchByTime(String hour) {
 		Flight flight = null;
 		TimeComparator tc = new TimeComparator(); 
 		
@@ -287,13 +322,13 @@ public class Airport {
 			}
 		}
 		return flight;
-	}
+	}*/
 
 	/**The method allows to search a flight with the specified airline
 	 * @param airline The airline criterion
 	 * @return The flight that matches the criterion or null if there are not matches
 	 * */
-	public Flight searchByAirline(String airline) {
+	/*public Flight searchByAirline(String airline) {
 		Flight flight = null;
 		Flight key = new Flight(new Date(1,1,1,1), airline, 0, "", 0);
 		AirlineComparator ac = new AirlineComparator();
@@ -321,13 +356,13 @@ public class Airport {
 			}
 		}
 		return flight;
-	}
+	}*/
 
 	/**The method allows to search a flight with the specified flight number
 	 * @param flightNumber The flight number criterion
 	 * @return The flight that matches the criterion or null if there are not matches
 	 * */
-	public Flight searchByFlightNumber(int flightNumber) throws IllegalArgumentException {
+	/*public Flight searchByFlightNumber(int flightNumber) throws IllegalArgumentException {
 		if(flightNumber <= 0) {
 			throw new IllegalArgumentException();
 		}
@@ -358,13 +393,13 @@ public class Airport {
 			}
 		}
 		return flight;
-	}
+	}*/
 
 	/**The method allows to search a flight with the specified destination city
 	 * @param destinationCity The destination city criterion
 	 * @return The flight that matches the criterion or null if there are not matches
 	 * */
-	public Flight searchByDestinationCity(String destinationCity) {
+	/*public Flight searchByDestinationCity(String destinationCity) {
 		Flight key = new Flight(new Date(1, 1, 1, 1), "", 0, destinationCity, 0);
 		Flight flight = null;
 		DestinationCityComparator dcc = new DestinationCityComparator();
@@ -392,13 +427,13 @@ public class Airport {
 			}
 		}
 		return flight;
-	}
+	}*/
 	
 	/**The method allows to search a flight with the specified boarding gates
 	 * @param bg The number of boarding gates criterion
 	 * @return The flight that matches the criterion or null if there are not matches
 	 * */
-	public Flight searchByBoardingGates(int bg) {
+	/*public Flight searchByBoardingGates(int bg) {
 		if(bg <= 0) {
 			throw new IllegalArgumentException();
 		}
@@ -420,6 +455,7 @@ public class Airport {
 		}
 		return flight;
 	}
+	*/
 	
 	/**The method allows to obtain a randomly selected city from a text file
 	 * @return A randomly selected city
@@ -437,4 +473,19 @@ public class Airport {
 		return airlines.get(a);
 	}
 
+	@Override
+	public String toString() {
+		String ret = "[";
+		Flight current = firstFlight;
+		while(current != null) {
+			ret += "("+current.getTime()+")";
+			current = current.getNext();
+			if(current != null) {
+				ret += ",";
+			}
+		}
+		ret += "];";
+		
+		return ret;
+	}
 }
