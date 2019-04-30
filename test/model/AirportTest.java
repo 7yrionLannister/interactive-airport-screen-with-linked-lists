@@ -33,8 +33,10 @@ class AirportTest {
 	@Test
 	public void generateFlightListTest() {
 		createAirportTest();
-		try {System.out.println("hola mundo");
-			airport.generateFlightList(5);System.out.println("ya genere prro");
+		try {
+			int f = 5;
+			airport.generateFlightList(f);
+			assertTrue("The airport did not generate the requested number of flights", f == airport.getNumberOfFlights());
 		} catch (IOException e) {
 			fail("The flights list should have been generated");
 		}
@@ -62,22 +64,17 @@ class AirportTest {
 			assertTrue("The flights list is not sorted", dc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
 		}
 		*/
-		System.out.println("before sort");
 		airport.sortByTime();
-		System.out.println("after sort");
-		System.out.println(airport);
-		/*System.out.println("before getflights");
 		 flights = airport.getFlights();
-		 System.out.println("after getflights");
 		for(int i = 1; i < flights.size(); i++) {
 			assertTrue("The flights list is not sorted", tc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
-		}*/
-		/*
+		}
+		//FIXME nunca regresa del metodo sortByAirline
 		airport.sortByAirline();
 		for(int i = 1; i < flights.size(); i++) {
 			assertTrue("The flights list is not sorted", ac.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
 		}
-		
+		/*
 		airport.sortByFlightNumber();
 		for(int i = 1; i < flights.size(); i++) {
 			assertTrue("The flights list is not sorted", fnc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);

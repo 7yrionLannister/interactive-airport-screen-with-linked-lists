@@ -134,19 +134,19 @@ public class Flight implements Comparable<Flight> {
 		return comparation;
 	}
 
-	public Flight getNext() {
+	public Flight getNext() {//System.out.println("getNext");
 		return next;
 	}
 
-	public void setNext(Flight next) {
+	public void setNext(Flight next) {//System.out.println("setNext");
 		this.next = next;
 	}
 
-	public Flight getPrev() {
+	public Flight getPrev() {//System.out.println("getPrev");
 		return prev;
 	}
 
-	public void setPrev(Flight prev) {
+	public void setPrev(Flight prev) {//System.out.println("setPrev");
 		this.prev = prev;
 	}
 
