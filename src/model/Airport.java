@@ -68,11 +68,11 @@ public class Airport {
 	/**The method allows to obtain the list of flights
 	 * @return The list of flights of this airport
 	 * */
-	public ObservableList<Flight> getFlights() {
-		ObservableList<Flight> flights = FXCollections.observableArrayList();
+	public ArrayList<Flight> getFlights() {
+		ArrayList<Flight> flights = new ArrayList<Flight>();
 		Flight current = firstFlight;
 		while(current != null) {
-
+			flights.add(current);
 			current = current.getNext();
 		}
 		return flights;
@@ -165,7 +165,7 @@ public class Airport {
 			for(int j = i+1; j < size-1; j++) {
 				Flight lowF = getFlight(low);
 				Flight jF = getFlight(j);
-				if(ac.compare(lowF, jF) > 0) {
+				if(lowF.getAirline().compareToIgnoreCase(jF.getAirline()) > 0) {
 					low = j;
 				}
 			}
@@ -189,6 +189,7 @@ public class Airport {
 			nextSup.setPrev(inf);
 		}
 		removeAuxiliaries();
+		System.out.println("YA SALIIIIIIIII");
 		orderType = ORDERED_BY_AIRLINE;
 	}
 
@@ -463,6 +464,7 @@ public class Airport {
 	
 	private void removeAuxiliaries() {
 		firstFlight = firstFlight.getNext();
+		firstFlight.setPrev(null);
 		Flight current = firstFlight;
 		while(current.getNext() != null) {
 			current = current.getNext();
@@ -509,7 +511,8 @@ public class Airport {
 		String ret = "[";
 		Flight current = firstFlight;
 		while(current != null) {
-			ret += "("+current.getTime()+")";
+			ret += "("+current.getAirline()+")";
+			
 			current = current.getNext();
 			if(current != null) {
 				ret += ",";
