@@ -12,6 +12,15 @@ public class Airport {
 	public final static String CITIES_PATH = "resources/cities.txt";
 	public final static String AIRLINES_PATH = "resources/airlines.txt";
 
+	public final static int DISORGANIZED = 1;
+	public final static int ORDERED_BY_DATE_AND_TIME = 2;
+	public final static int ORDERED_BY_DATE = 3;
+	public final static int ORDERED_BY_FLIGHT_NUMBER = 4;
+	public final static int ORDERED_BY_TIME = 5;
+	public final static int ORDERED_BY_DESTINATION_CITY = 6;
+	public final static int ORDERED_BY_AIRLINE = 7;
+	public final static int ORDERED_BY_BOARDING_GATES = 8;
+	
 	private ArrayList<String> cities;
 	private ArrayList<String> airlines;
 
@@ -149,8 +158,9 @@ public class Airport {
 		addAuxiliaries();
 		int flights = getNumberOfFlights();
 		for(int i = 1; i < flights-1; i++) {
+			Flight inf = firstFlight;
 			for(int j = 1; j < flights-1-i; j++) {
-				Flight inf = getFlight(j);
+				inf = inf.getNext();
 				Flight sup = inf.getNext();
 				if(dc.compare(inf, sup) > 0) {
 					sup.getNext().setPrev(inf);
@@ -159,6 +169,7 @@ public class Airport {
 					sup.setPrev(inf.getPrev());
 					inf.setPrev(sup);
 					sup.setNext(inf);
+					inf = sup;
 				}
 			}
 		}
@@ -172,8 +183,9 @@ public class Airport {
 		addAuxiliaries();
 		int flights = getNumberOfFlights();
 		for(int i = 1; i < flights-1; i++) {
+			Flight inf = firstFlight;
 			for(int j = 1; j < flights-1-i; j++) {
-				Flight inf = getFlight(j);
+				inf = inf.getNext();
 				Flight sup = inf.getNext();
 				if(tc.compare(inf, sup) > 0) {
 					sup.getNext().setPrev(inf);
@@ -182,6 +194,7 @@ public class Airport {
 					sup.setPrev(inf.getPrev());
 					inf.setPrev(sup);
 					sup.setNext(inf);
+					inf = sup;
 				}
 			}
 		}
@@ -258,7 +271,7 @@ public class Airport {
 		removeAuxiliaries();
 	}
 
-	/**The method allows to organize the flights in ascending order according to its destination city
+	/**The method allows to organize the flights in ascending order according to its destination city. It uses insertion sort
 	 * */
 	public void sortByDestinationCity() {
 		DestinationCityComparator dcc = new DestinationCityComparator();
@@ -283,7 +296,7 @@ public class Airport {
 		removeAuxiliaries();
 	}
 
-	/**The method allows to organize the flights in ascending order according to its number of boarding gates
+	/**The method allows to organize the flights in ascending order according to its number of boarding gates. It uses insertion sort
 	 * */
 	public void sortByBoardingGates() {
 		BoardingGatesComparator bgc = new BoardingGatesComparator();
