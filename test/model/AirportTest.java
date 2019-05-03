@@ -35,7 +35,7 @@ class AirportTest {
 	public void generateFlightListTest() {
 		createAirportTest();
 		try {
-			int f = 8;
+			int f = 200;
 			airport.generateFlightList(f);
 			assertTrue("The airport did not generate the requested number of flights", f == airport.getNumberOfFlights());
 		} catch (IOException e) {
@@ -54,55 +54,48 @@ class AirportTest {
 		BoardingGatesComparator bgc = new BoardingGatesComparator();
 		DestinationCityComparator dcc = new DestinationCityComparator();
 		
-		/*
 		airport.sortByDateAndTime();
+		flights = airport.getFlights();
 		for(int i = 1; i < flights.size(); i++) {
 			assertTrue("The flights list is not sorted", airport.getFlights().get(i-1).compareTo(airport.getFlights().get(i)) <= 0);
 		}
 		
 		airport.sortByDate();
+		flights = airport.getFlights();
 		for(int i = 1; i < flights.size(); i++) {
 			assertTrue("The flights list is not sorted", dc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
 		}
-		*/
-		//FIXME aveces funciona, otras no se le da la gana de regresar del metodo sortByAirline
-		flights = airport.getFlights();
-		for(int i = 0; i < flights.size(); i++) {
-			System.out.println(flights.get(i).getAirline());
-		}
+		
 		airport.sortByAirline();
-		System.out.println(airport);
 		flights = airport.getFlights();
-		for(int i = 0; i < flights.size(); i++) {
-			System.out.println(flights.get(i).getAirline());
-		}
 		for(int i = 1; i < flights.size(); i++) {
-			System.out.println(ac.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)));
 			assertTrue("The flights list is not sorted", ac.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
 		}
 		
-		//TODO Bubble sort ya funciona
 		airport.sortByTime();
 		flights = airport.getFlights();
 		for(int i = 1; i < flights.size(); i++) {
 			assertTrue("The flights list is not sorted", tc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
 		}
-		/*
+		
 		airport.sortByFlightNumber();
+		flights = airport.getFlights();
 		for(int i = 1; i < flights.size(); i++) {
 			assertTrue("The flights list is not sorted", fnc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
 		}
 		
 		airport.sortByBoardingGates();
+		flights = airport.getFlights();
 		for(int i = 1; i < flights.size(); i++) {
 			assertTrue("The flights list is not sorted", bgc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
 		}
 		
 		airport.sortByDestinationCity();
+		flights = airport.getFlights();
 		for(int i = 1; i < flights.size(); i++) {
 			assertTrue("The flights list is not sorted", dcc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
 		}
-		*/
+		
 	}
 	
 	/*@Test

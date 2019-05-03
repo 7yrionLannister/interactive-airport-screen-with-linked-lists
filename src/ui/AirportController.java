@@ -113,8 +113,6 @@ public class AirportController {
 	public void initialize() {
 		currentPage = 0;
 		
-		setupFlights();
-		
 		timeTableColumn.setCellValueFactory(new PropertyValueFactory<Flight, String>("time"));
 		dateTableColumn.setCellValueFactory(new PropertyValueFactory<Flight, String>("date"));
 		flightTableColumn.setCellValueFactory(new PropertyValueFactory<Flight, Integer>("flightNumber"));
@@ -142,6 +140,7 @@ public class AirportController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		setupFlights();
 	}
 
 	@FXML
@@ -149,6 +148,7 @@ public class AirportController {
 		try {
 			int lenght = Integer.parseInt(numberOfFlightsTextField.getText());
 			airport.generateFlightList(lenght);
+			setupFlights();
 		} catch (IOException|NumberFormatException e) {
 
 		}
@@ -273,6 +273,7 @@ public class AirportController {
 			break;
 		}
 		long timeAfterSorting = System.currentTimeMillis();
+		setupFlights();
 		setupPage();
 		showDialog("Time sorting: " + (timeAfterSorting-timeBeforeSorting) + " miliseconds");
 	}
@@ -360,7 +361,7 @@ public class AirportController {
 	}
 	
 	public void setupFlights() {
-		flights = FXCollections.observableArrayList();
+		flights = FXCollections.observableArrayList(airport.getFlights());
 	}
 }
 
