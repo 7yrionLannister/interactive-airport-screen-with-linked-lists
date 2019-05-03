@@ -140,7 +140,7 @@ public class AirportController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		setupFlights();
+		flights = FXCollections.observableArrayList(airport.getFlights());
 	}
 
 	@FXML
@@ -148,7 +148,7 @@ public class AirportController {
 		try {
 			int lenght = Integer.parseInt(numberOfFlightsTextField.getText());
 			airport.generateFlightList(lenght);
-			setupFlights();
+			flights = FXCollections.observableArrayList(airport.getFlights());
 		} catch (IOException|NumberFormatException e) {
 
 		}
@@ -273,7 +273,7 @@ public class AirportController {
 			break;
 		}
 		long timeAfterSorting = System.currentTimeMillis();
-		setupFlights();
+		flights = FXCollections.observableArrayList(airport.getFlights());
 		setupPage();
 		showDialog("Time sorting: " + (timeAfterSorting-timeBeforeSorting) + " miliseconds");
 	}
@@ -358,10 +358,6 @@ public class AirportController {
 		else {
 			previousButton.setDisable(true);
 		}
-	}
-	
-	public void setupFlights() {
-		flights = FXCollections.observableArrayList(airport.getFlights());
 	}
 }
 
