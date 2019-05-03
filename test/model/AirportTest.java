@@ -43,60 +43,81 @@ class AirportTest {
 		}
 	}
 	
-	@Test
-	public void sortTest() {
+	/*@Test
+	public void sortByDateAndTimeTest() {
 		generateFlightListTest();
-		ArrayList<Flight> flights;
-		DateComparator dc= new DateComparator();
-		TimeComparator tc = new TimeComparator();
-		AirlineComparator ac = new AirlineComparator();
-		FlightNumberComparator fnc= new FlightNumberComparator();
-		BoardingGatesComparator bgc = new BoardingGatesComparator();
-		DestinationCityComparator dcc = new DestinationCityComparator();
-		
 		airport.sortByDateAndTime();
-		flights = airport.getFlights();
-		for(int i = 1; i < flights.size(); i++) {
-			assertTrue("The flights list is not sorted", airport.getFlights().get(i-1).compareTo(airport.getFlights().get(i)) <= 0);
+		Flight current = airport.getFirstFlight().getNext();
+		while(current != null) {
+			assertTrue("The flights list is not sorted", current.getPrev().compareTo(current) <= 0);
 		}
-		
-		airport.sortByDate();
-		flights = airport.getFlights();
-		for(int i = 1; i < flights.size(); i++) {
-			assertTrue("The flights list is not sorted", dc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
-		}
-		
+	}*/
+	
+	/*@Test
+	public void sortByAirlineTest() {
+		generateFlightListTest();
+		AirlineComparator ac = new AirlineComparator();
 		airport.sortByAirline();
-		flights = airport.getFlights();
-		for(int i = 1; i < flights.size(); i++) {
-			assertTrue("The flights list is not sorted", ac.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
+		Flight current = airport.getFirstFlight().getNext();
+		while(current != null) {
+			assertTrue("The flights list is not sorted", ac.compare(current.getPrev(), current) <= 0);
 		}
-		
+	}*/
+	
+	/*@Test
+	public void sortByTimeTest() {
+		generateFlightListTest();
+		TimeComparator tc = new TimeComparator();
 		airport.sortByTime();
-		flights = airport.getFlights();
-		for(int i = 1; i < flights.size(); i++) {
-			assertTrue("The flights list is not sorted", tc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
+		Flight current = airport.getFirstFlight().getNext();
+		while(current != null) {
+			assertTrue("The flights list is not sorted", tc.compare(current.getPrev(), current) <= 0);
 		}
-		
-		airport.sortByFlightNumber();
-		flights = airport.getFlights();
-		for(int i = 1; i < flights.size(); i++) {
-			assertTrue("The flights list is not sorted", fnc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
-		}
-		
-		airport.sortByBoardingGates();
-		flights = airport.getFlights();
-		for(int i = 1; i < flights.size(); i++) {
-			assertTrue("The flights list is not sorted", bgc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
-		}
-		
+	}*/
+	
+	/*@Test
+	public void sortByDestinationCityTest() {
+		generateFlightListTest();
+		DestinationCityComparator dcc = new DestinationCityComparator();
 		airport.sortByDestinationCity();
-		flights = airport.getFlights();
-		for(int i = 1; i < flights.size(); i++) {
-			assertTrue("The flights list is not sorted", dcc.compare(airport.getFlights().get(i-1), airport.getFlights().get(i)) <= 0);
+		Flight current = airport.getFirstFlight().getNext();
+		while(current != null) {
+			assertTrue("The flights list is not sorted", dcc.compare(current.getPrev(), current) <= 0);
 		}
-		
-	}
+	}*/
+	
+	/*@Test
+	public void sortByFlightNumberTest() {
+		generateFlightListTest();
+		FlightNumberComparator fnc= new FlightNumberComparator();
+		airport.sortByFlightNumber();
+		Flight current = airport.getFirstFlight().getNext();
+		while(current != null) {
+			assertTrue("The flights list is not sorted", fnc.compare(current.getPrev(), current) <= 0);
+		}
+	}*/
+	
+	/*@Test
+	public void sortByBoardingGatesTest() {
+		generateFlightListTest();
+		BoardingGatesComparator bgc = new BoardingGatesComparator();
+		airport.sortByBoardingGates();
+		Flight current = airport.getFirstFlight().getNext();
+		while(current != null) {
+			assertTrue("The flights list is not sorted", bgc.compare(current.getPrev(), current) <= 0);
+		}
+	}*/
+	
+	/*@Test
+	public void sortByDateTest() {
+		generateFlightListTest();
+		DateComparator dc= new DateComparator();
+		airport.sortByDate();
+		Flight current = airport.getFirstFlight().getNext();
+		while(current != null) {
+			assertTrue("The flights list is not sorted", dc.compare(current.getPrev(), current) <= 0);
+		}
+	}*/
 	
 	/*@Test
 	public void searchTest() {
