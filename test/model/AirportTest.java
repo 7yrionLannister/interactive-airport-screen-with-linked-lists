@@ -1,16 +1,10 @@
 package model;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 class AirportTest {
 
@@ -35,7 +29,7 @@ class AirportTest {
 	public void generateFlightListTest() {
 		createAirportTest();
 		try {
-			int f = 200;
+			int f = 342;
 			airport.generateFlightList(f);
 			assertTrue("The airport did not generate the requested number of flights", f == airport.getNumberOfFlights());
 		} catch (IOException e) {
@@ -43,28 +37,30 @@ class AirportTest {
 		}
 	}
 	
-	/*@Test
+	@Test
 	public void sortByDateAndTimeTest() {
 		generateFlightListTest();
 		airport.sortByDateAndTime();
 		Flight current = airport.getFirstFlight().getNext();
 		while(current != null) {
 			assertTrue("The flights list is not sorted", current.getPrev().compareTo(current) <= 0);
+			current = current.getNext();
 		}
-	}*/
+	}
 	
-	/*@Test
+	@Test
 	public void sortByAirlineTest() {
 		generateFlightListTest();
 		AirlineComparator ac = new AirlineComparator();
-		airport.sortByAirline();
+		airport.sortByAirline();System.out.println("putos");
 		Flight current = airport.getFirstFlight().getNext();
 		while(current != null) {
 			assertTrue("The flights list is not sorted", ac.compare(current.getPrev(), current) <= 0);
+			current = current.getNext();
 		}
-	}*/
+	}
 	
-	/*@Test
+	@Test
 	public void sortByTimeTest() {
 		generateFlightListTest();
 		TimeComparator tc = new TimeComparator();
@@ -72,10 +68,11 @@ class AirportTest {
 		Flight current = airport.getFirstFlight().getNext();
 		while(current != null) {
 			assertTrue("The flights list is not sorted", tc.compare(current.getPrev(), current) <= 0);
+			current = current.getNext();
 		}
-	}*/
+	}
 	
-	/*@Test
+	@Test
 	public void sortByDestinationCityTest() {
 		generateFlightListTest();
 		DestinationCityComparator dcc = new DestinationCityComparator();
@@ -83,10 +80,11 @@ class AirportTest {
 		Flight current = airport.getFirstFlight().getNext();
 		while(current != null) {
 			assertTrue("The flights list is not sorted", dcc.compare(current.getPrev(), current) <= 0);
+			current = current.getNext();
 		}
-	}*/
+	}
 	
-	/*@Test
+	@Test
 	public void sortByFlightNumberTest() {
 		generateFlightListTest();
 		FlightNumberComparator fnc= new FlightNumberComparator();
@@ -94,10 +92,11 @@ class AirportTest {
 		Flight current = airport.getFirstFlight().getNext();
 		while(current != null) {
 			assertTrue("The flights list is not sorted", fnc.compare(current.getPrev(), current) <= 0);
+			current = current.getNext();
 		}
-	}*/
+	}
 	
-	/*@Test
+	@Test
 	public void sortByBoardingGatesTest() {
 		generateFlightListTest();
 		BoardingGatesComparator bgc = new BoardingGatesComparator();
@@ -105,10 +104,11 @@ class AirportTest {
 		Flight current = airport.getFirstFlight().getNext();
 		while(current != null) {
 			assertTrue("The flights list is not sorted", bgc.compare(current.getPrev(), current) <= 0);
+			current = current.getNext();
 		}
-	}*/
+	}
 	
-	/*@Test
+	@Test
 	public void sortByDateTest() {
 		generateFlightListTest();
 		DateComparator dc= new DateComparator();
@@ -116,8 +116,9 @@ class AirportTest {
 		Flight current = airport.getFirstFlight().getNext();
 		while(current != null) {
 			assertTrue("The flights list is not sorted", dc.compare(current.getPrev(), current) <= 0);
+			current = current.getNext();
 		}
-	}*/
+	}
 	
 	/*@Test
 	public void searchTest() {

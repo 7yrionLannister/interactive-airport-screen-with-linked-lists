@@ -530,4 +530,8 @@ public class Airport {
 
 		return ret;
 	}
+
+	public Flight getFirstFlight() {
+		return firstFlight;
+	}
 }
