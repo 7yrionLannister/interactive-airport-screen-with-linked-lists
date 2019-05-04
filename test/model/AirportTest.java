@@ -29,9 +29,15 @@ class AirportTest {
 	public void generateFlightListTest() {
 		createAirportTest();
 		try {
-			int f = 342;
-			airport.generateFlightList(f);
-			assertTrue("The airport did not generate the requested number of flights", f == airport.getNumberOfFlights());
+			int flights = 3500;
+			airport.generateFlightList(flights);
+			int addedFlights = 0;
+			Flight current = airport.getFirstFlight();
+			while(current != null) {
+				addedFlights++;
+				current = current.getNext();
+			}
+			assertTrue("The airport did not generate the requested number of flights", flights == addedFlights);
 		} catch (IOException e) {
 			fail("The flights list should have been generated");
 		}
@@ -52,7 +58,7 @@ class AirportTest {
 	public void sortByAirlineTest() {
 		generateFlightListTest();
 		AirlineComparator ac = new AirlineComparator();
-		airport.sortByAirline();System.out.println("putos");
+		airport.sortByAirline();
 		Flight current = airport.getFirstFlight().getNext();
 		while(current != null) {
 			assertTrue("The flights list is not sorted", ac.compare(current.getPrev(), current) <= 0);

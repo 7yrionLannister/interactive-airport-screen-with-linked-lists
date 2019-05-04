@@ -59,6 +59,7 @@ class DateTest {
 		}
 	}
 
+	@Test
 	public void compareAndSortDateTest() {
 		setupScenary2();
 		Collections.sort(dates);

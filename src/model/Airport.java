@@ -110,15 +110,17 @@ public class Airport {
 	/**The method allows to organize the flights in ascending order according to its date and time. It uses selection sort
 	 * */
 	public void sortByDateAndTime() {
-		addAuxiliaries();
-		int size = getNumberOfFlights();
-		for(int i = 1; i < size-2; i++) {
+		int flights = addAuxiliaries();
+		Flight lowF = firstFlight;
+		for(int i = 1; i < flights-2; i++) {
+			lowF = lowF.getNext();
 			int low = i;
-			for(int j = i+1; j < size-1; j++) {
-				Flight lowF = getFlight(low);
-				Flight jF = getFlight(j);
+			Flight jF = lowF;
+			for(int j = i+1; j < flights-1; j++) {
+				jF = jF.getNext();
 				if(lowF.compareTo(jF) > 0) {
 					low = j;
+					lowF = jF;
 				}
 			}
 			Flight inf = getFlight(i);
@@ -155,8 +157,7 @@ public class Airport {
 	 * */
 	public void sortByDate() {
 		DateComparator dc = new DateComparator();
-		addAuxiliaries();
-		int flights = getNumberOfFlights();
+		int flights = addAuxiliaries();
 		for(int i = 1; i < flights-1; i++) {
 			Flight inf = firstFlight;
 			for(int j = 1; j < flights-1-i; j++) {
@@ -176,27 +177,26 @@ public class Airport {
 		removeAuxiliaries();
 	}
 
-	/**The method allows to organize the flights in ascending order according to its time. It uses bubble sort
+	/**The method allows to organize the flights in ascending order according to its time. It uses insertion sort
 	 * */
 	public void sortByTime() {
 		TimeComparator tc = new TimeComparator();
-		addAuxiliaries();
-		int flights = getNumberOfFlights();
-		for(int i = 1; i < flights-1; i++) {
-			Flight inf = firstFlight;
-			for(int j = 1; j < flights-1-i; j++) {
-				inf = inf.getNext();
-				Flight sup = inf.getNext();
-				if(tc.compare(inf, sup) > 0) {
-					sup.getNext().setPrev(inf);
-					inf.setNext(sup.getNext());
-					inf.getPrev().setNext(sup);
-					sup.setPrev(inf.getPrev());
-					inf.setPrev(sup);
-					sup.setNext(inf);
-					inf = sup;
-				}
+		int flights = addAuxiliaries();
+		for(int i = 2; i < flights-1; i++) {
+			Flight sup = getFlight(i);
+			int j = i-1;
+			Flight inf = getFlight(j);
+			while(j >= 1 && tc.compare(sup, inf)  < 0) {
+				inf = inf.getPrev();
+				j--;
 			}
+			sup.getPrev().setNext(sup.getNext());
+			sup.getNext().setPrev(sup.getPrev());
+
+			inf.getNext().setPrev(sup);
+			sup.setNext(inf.getNext());
+			inf.setNext(sup);
+			sup.setPrev(inf);
 		}
 		removeAuxiliaries();
 	}
@@ -205,15 +205,17 @@ public class Airport {
 	 * */
 	public void sortByAirline() {
 		AirlineComparator ac = new AirlineComparator();
-		addAuxiliaries();
-		int size = getNumberOfFlights();
-		for(int i = 1; i < size-2; i++) {
+		int flights = addAuxiliaries();
+		Flight lowF = firstFlight;
+		for(int i = 1; i < flights-2; i++) {
+			lowF = lowF.getNext();
 			int low = i;
-			for(int j = i+1; j < size-1; j++) {
-				Flight lowF = getFlight(low);
-				Flight jF = getFlight(j);
+			Flight jF = lowF;
+			for(int j = i+1; j < flights-1; j++) {
+				jF = jF.getNext();
 				if(ac.compare(lowF, jF) > 0) {
 					low = j;
+					lowF = jF;
 				}
 			}
 			Flight inf = getFlight(i);
@@ -245,13 +247,13 @@ public class Airport {
 		}
 		removeAuxiliaries();
 	}
+	
 
 	/**The method allows to organize the flights in ascending order according to its flight number. It uses insertion sort
 	 * */
 	public void sortByFlightNumber() {
 		FlightNumberComparator fnc = new FlightNumberComparator();
-		addAuxiliaries();
-		int flights = getNumberOfFlights();
+		int flights = addAuxiliaries();
 		for(int i = 2; i < flights-1; i++) {
 			Flight sup = getFlight(i);
 			int j = i-1;
@@ -260,6 +262,7 @@ public class Airport {
 				inf = inf.getPrev();
 				j--;
 			}
+			
 			sup.getPrev().setNext(sup.getNext());
 			sup.getNext().setPrev(sup.getPrev());
 
@@ -275,8 +278,7 @@ public class Airport {
 	 * */
 	public void sortByDestinationCity() {
 		DestinationCityComparator dcc = new DestinationCityComparator();
-		addAuxiliaries();
-		int flights = getNumberOfFlights();
+		int flights = addAuxiliaries();
 		for(int i = 2; i < flights-1; i++) {
 			Flight sup = getFlight(i);
 			int j = i-1;
@@ -300,8 +302,7 @@ public class Airport {
 	 * */
 	public void sortByBoardingGates() {
 		BoardingGatesComparator bgc = new BoardingGatesComparator();
-		addAuxiliaries();
-		int flights = getNumberOfFlights();
+		int flights = addAuxiliaries();
 		for(int i = 2; i < flights-1; i++) {
 			Flight sup = getFlight(i);
 			int j = i-1;
@@ -470,6 +471,9 @@ public class Airport {
 		return airlines.get(a);
 	}
 
+	/**The method allows to remove the auxiliaries that were added to consider only the general swap in the sorting algorithms<br>
+	 * It has to be called when the sorting algorithm has finished its job
+	 * */
 	private void removeAuxiliaries() {
 		firstFlight = firstFlight.getNext();
 		firstFlight.setPrev(null);
@@ -481,7 +485,12 @@ public class Airport {
 		current.setPrev(null);
 	}
 
-	private void addAuxiliaries() {
+	/**The method allows to add two auxiliaries, one at the start and one at the end<br>
+	 * This is done to consider only the general swap in the sorting algorithms
+	 * @return The number of flights in the linked list when added the auxiliaries
+	 * */
+	private int addAuxiliaries() {
+		int size = 2;
 		Flight start = new Flight(new Date(1, 1, 1, 1), "Vuelaya", 823417, "abc", 123123);
 		Flight end = new Flight(new Date(1, 1, 1, 1), "Vuelahora", 823222, "def", 321123);
 		start.setNext(firstFlight);
@@ -490,11 +499,17 @@ public class Airport {
 		Flight current = firstFlight;
 		while(current.getNext() != null) { 
 			current = current.getNext();
+			size++;
 		}
 		current.setNext(end);
 		end.setPrev(current);
+		return size;
 	}	
 
+	/**The method allows to obtain the flight that is in the position referred by the index
+	 * @param index The position where the flight is lodged
+	 * @return The flight in the position referred by the index
+	 * */
 	private Flight getFlight(int index) {
 		Flight current = firstFlight;
 		while(index > 0) {
@@ -504,33 +519,8 @@ public class Airport {
 		return current;
 	}
 
-	public int getNumberOfFlights() {
-		Flight current = firstFlight;
-		int num = 0;
-		while(current != null) {
-			num++;
-			current = current.getNext();
-		}
-		return num;
-	}
-
-	@Override
-	public String toString() {
-		String ret = "[";
-		Flight current = firstFlight;
-		while(current != null) {
-			ret += "("+current.getFlightNumber()+")";
-
-			current = current.getNext();
-			if(current != null) {
-				ret += ",";
-			}
-		}
-		ret += "];";
-
-		return ret;
-	}
-
+	/**The method allows to obtain the first element in the linked list
+	 * */
 	public Flight getFirstFlight() {
 		return firstFlight;
 	}
