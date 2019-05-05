@@ -152,6 +152,7 @@ public class AirportController {
 		} catch (IOException|NumberFormatException e) {
 
 		}
+		currentPage = 0;
 		setupPage();
 	}
 

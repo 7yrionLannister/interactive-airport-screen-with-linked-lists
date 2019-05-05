@@ -28,7 +28,7 @@ public class Airport {
 	private SecureRandom sr;
 
 	/**The method allows to create an instance of Airport with the specified list of flights
-	 * @param flights The list of flights that the airport will have
+	 * @throws IOException if there is a problem reading the files that contain the information about the cities and airlines
 	 * */
 	public Airport() throws IOException {
 		sr = new SecureRandom();
@@ -74,6 +74,8 @@ public class Airport {
 	}
 
 	/**The method allows to fill the list of flights with "length" randomly generated flights
+	 * @param lenght The number of flights to generate
+	 * @throws IOException if there is a problem reading the files that contain the information about the cities and airlines
 	 * */
 	public void generateFlightList(int lenght) throws IOException {
 		firstFlight = null;
@@ -520,6 +522,7 @@ public class Airport {
 	}
 
 	/**The method allows to obtain the first element in the linked list
+	 * @return The first element of the list
 	 * */
 	public Flight getFirstFlight() {
 		return firstFlight;
