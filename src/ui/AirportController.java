@@ -145,6 +145,7 @@ public class AirportController {
 
 	@FXML
 	public  void generateFlightList(ActionEvent event) {
+		long beforeGenerate = System.currentTimeMillis();
 		try {
 			int lenght = Integer.parseInt(numberOfFlightsTextField.getText());
 			airport.generateFlightList(lenght);
@@ -152,8 +153,11 @@ public class AirportController {
 		} catch (IOException|NumberFormatException e) {
 
 		}
+		long afterGenerate = System.currentTimeMillis();
+		long duration = afterGenerate - beforeGenerate;
 		currentPage = 0;
 		setupPage();
+		showDialog("List generated in " + duration + " miliseconds");
 	}
 
 	@FXML
@@ -329,11 +333,11 @@ public class AirportController {
 		dialog.setContentText(message);
 		if(message.substring(0, 4).equalsIgnoreCase("time")) {
 			dialog.setTitle("Time sorting");
-		}
-		else if(message.substring(0, 4).equalsIgnoreCase("your")) {
+		} else if(message.substring(0, 4).equalsIgnoreCase("your")) {
 			dialog.setTitle("Unsuccessful search");
-		}
-		else {
+		} else if(message.substring(0, 4).equalsIgnoreCase("list")) {
+			dialog.setTitle("Time generating");
+		} else {
 			dialog.setTitle("Invalid input");
 		}
 		Window window = dialog.getDialogPane().getScene().getWindow();
