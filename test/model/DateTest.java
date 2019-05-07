@@ -53,8 +53,7 @@ class DateTest {
 		try {
 			new Date(day, month, year, hour);
 			fail("The date should not have been created as the parameters were invalid");
-		}
-		catch(IllegalArgumentException iae) {
+		} catch(IllegalArgumentException iae) {
 			assertTrue(true);
 		}
 	}

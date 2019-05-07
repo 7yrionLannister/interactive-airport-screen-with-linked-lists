@@ -1,12 +1,13 @@
 package model;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-class AirportTest {
+public class AirportTest {
 
 	private Airport airport;
 	
@@ -126,10 +127,15 @@ class AirportTest {
 		}
 	}
 	
-	/*@Test
+	@Test
 	public void searchTest() {
 		generateFlightListTest();
-		Flight flightToSearch = airport.getFlights().get(222);
+		Flight flightToSearch = airport.getFirstFlight();
+		int i = 0;
+		while(i < 300) {
+			flightToSearch = flightToSearch.getNext();
+			i++;
+		}
 		String date = flightToSearch.getDate().toString();
 		String time = flightToSearch.getTime();
 		String airline = flightToSearch.getAirline();
@@ -163,5 +169,5 @@ class AirportTest {
 		found = airport.searchByBoardingGates(gates);
 		assertNotNull("The algorithm should have found a flight", found);
 		assertTrue("The flight found does not have the number of boarding gates searched", gates == found.getBoardingGates());
-	}*/
+	}
 }
